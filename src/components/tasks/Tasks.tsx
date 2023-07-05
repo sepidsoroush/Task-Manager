@@ -1,14 +1,11 @@
 import React from "react";
 import TaskItem from "./TaskItem";
+import Task from "../../models/tasks";
 
-const Tasks: React.FC = () => {
-  const tasksList = [
-    { id: 1, text: "Doing dishes" },
-    { id: 2, text: "Buying groceries" },
-  ];
+const Tasks: React.FC<{ items: Task[] }> = (props) => {
   return (
     <ul>
-      {tasksList.map((item) => (
+      {props.items.map((item) => (
         <TaskItem key={item.id} taskText={item.text} />
       ))}
     </ul>
