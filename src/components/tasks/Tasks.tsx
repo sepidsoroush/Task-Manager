@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TasksContext } from "../../store/tasks-context";
 import TaskItem from "./TaskItem";
-import Task from "../../models/tasks";
 
-const Tasks: React.FC<{ items: Task[] }> = (props) => {
+const Tasks: React.FC = () => {
+  const contextValue = useContext(TasksContext);
+
   return (
     <ul>
-      {props.items.map((item) => (
+      {contextValue.items.map((item) => (
         <TaskItem key={item.id} taskText={item.text} />
       ))}
     </ul>

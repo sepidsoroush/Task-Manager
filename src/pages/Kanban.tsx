@@ -1,5 +1,11 @@
+import Tasks from "../components/tasks/Tasks";
+
 const Kanban = () => {
-  return <h1>Kanban</h1>;
+  return (
+    <div>
+      <Tasks />
+    </div>
+  );
 };
 
 export default Kanban;

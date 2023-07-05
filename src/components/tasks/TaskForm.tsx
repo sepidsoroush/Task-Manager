@@ -1,6 +1,8 @@
-import { useRef } from "react";
+import React, { useRef, useContext } from "react";
+import { TasksContext } from "../../store/tasks-context";
 
-const NewTask: React.FC<{ onAddTask: (text: string) => void }> = (props) => {
+const TaskForm: React.FC = () => {
+  const contextValue = useContext(TasksContext);
   const taskTextInputRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = (event: React.FormEvent) => {
@@ -12,7 +14,7 @@ const NewTask: React.FC<{ onAddTask: (text: string) => void }> = (props) => {
       // throw an error
       return;
     }
-    props.onAddTask(enteredText);
+    contextValue.addItems(enteredText);
   };
 
   return (
@@ -24,4 +26,4 @@ const NewTask: React.FC<{ onAddTask: (text: string) => void }> = (props) => {
   );
 };
 
-export default NewTask;
+export default TaskForm;

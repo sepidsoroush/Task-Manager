@@ -1,5 +1,7 @@
+import TaskForm from "../components/tasks/TaskForm";
+
 const NewTask = () => {
-  return <h1>New Task</h1>;
+  return <TaskForm />;
 };
 
 export default NewTask;
