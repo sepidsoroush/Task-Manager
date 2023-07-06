@@ -1,10 +1,19 @@
 class Task {
   id: string;
   text: string;
+  date: string;
+  time: string;
 
-  constructor(taskText: string) {
+  constructor(
+    taskID: string,
+    taskText: string,
+    taskDate: string,
+    taskTime: string
+  ) {
+    this.id = taskID;
     this.text = taskText;
-    this.id = new Date().toISOString();
+    this.time = taskTime;
+    this.date = taskDate;
   }
 }
 
