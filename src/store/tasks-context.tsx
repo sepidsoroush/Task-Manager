@@ -3,7 +3,7 @@ import Task from "../models/tasks";
 
 type TasksContextObj = {
   items: Task[];
-  addItems: (text: string) => void;
+  addItems: (item: Task[]) => void;
   removeItem: (id: string) => void;
 };
 type BaseLayoutProps = {
@@ -19,9 +19,9 @@ export const TasksContext = createContext<TasksContextObj>({
 const TasksContextProvider: React.FC<BaseLayoutProps> = (props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const addTaskHandler = (taskText: string) => {
+  const addTaskHandler = (newItem: Task[]) => {
     setTasks((prevState) => {
-      return prevState.concat(new Task(taskText));
+      return prevState.concat(newItem);
     });
   };
 

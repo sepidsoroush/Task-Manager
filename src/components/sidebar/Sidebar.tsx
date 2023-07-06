@@ -4,7 +4,6 @@ import { createStyles, Navbar, getStylesRef, rem } from "@mantine/core";
 import {
   IconLayoutKanban,
   IconCalendar,
-  IconPlus,
   IconSearch,
   IconBellRinging,
   IconSettings,
@@ -83,7 +82,6 @@ const useStyles = createStyles((theme) => ({
 const data = [
   { link: "/", label: "Kanban", icon: IconLayoutKanban },
   { link: "/calendar", label: "Calendar", icon: IconCalendar },
-  { link: "/newtask", label: "New Task", icon: IconPlus },
   { link: "/notifications", label: "Notifications", icon: IconBellRinging },
   { link: "/search", label: "Search", icon: IconSearch },
 ];

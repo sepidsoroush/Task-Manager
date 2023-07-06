@@ -4,6 +4,7 @@ import TaskItem from "./TaskItem";
 
 const Tasks: React.FC = () => {
   const contextValue = useContext(TasksContext);
+  console.log(contextValue.items);
 
   return (
     <ul>
