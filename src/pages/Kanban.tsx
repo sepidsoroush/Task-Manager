@@ -1,5 +1,5 @@
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Group, Button } from "@mantine/core";
+import { Modal, Group, Button, Box } from "@mantine/core";
 import TaskForm from "../components/tasks/TaskForm";
 import Tasks from "../components/tasks/Tasks";
 
@@ -7,19 +7,16 @@ const Kanban = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <div>
-      <div>
-        <Modal opened={opened} onClose={close} title="Add new task">
-          <TaskForm />
-        </Modal>
+    <Box>
+      <Modal opened={opened} onClose={close} title="Add new task">
+        <TaskForm />
+      </Modal>
+      <Button onClick={open}>Add new task</Button>
 
-        <Group position="center">
-          <Button onClick={open}>Add new task</Button>
-        </Group>
-      </div>
-
-      <Tasks />
-    </div>
+      <Group my={10}>
+        <Tasks />
+      </Group>
+    </Box>
   );
 };
 
