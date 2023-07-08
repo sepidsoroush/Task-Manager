@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
-import { TasksContext } from "../../store/tasks-context";
+import React from "react";
 import TaskItem from "./TaskItem";
 import { Flex } from "@mantine/core";
+import { useAppSelector } from "../../store/hooks";
 
 const Tasks: React.FC = () => {
-  const contextValue = useContext(TasksContext);
-  console.log(contextValue.items);
+  const items = useAppSelector((state) => state.tasks.items);
 
   return (
     <Flex
@@ -15,7 +14,7 @@ const Tasks: React.FC = () => {
       direction="row"
       wrap="wrap"
     >
-      {contextValue.items.map((item) => (
+      {items.map((item) => (
         <TaskItem key={item.id} taskText={item.text} taskDate={item.date} />
       ))}
     </Flex>

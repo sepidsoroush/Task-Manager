@@ -1,15 +1,16 @@
+import { useRef } from "react";
 import { TextInput, Button, Group, Box } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useContext, useRef } from "react";
-import { TasksContext } from "../../store/tasks-context";
+import { addAction } from "../../store/tasks-actions";
 import { DateInput } from "@mantine/dates";
 import { ActionIcon } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconClock } from "@tabler/icons-react";
 import Task from "../../models/tasks";
+import { useAppDispatch } from "../../store/hooks";
 
 const TaskForm: React.FC = () => {
-  const contextValue = useContext(TasksContext);
+  const dispatch = useAppDispatch();
   const taskTextInputRef = useRef<HTMLInputElement>(null);
   const taskDateInputRef = useRef<HTMLInputElement>(null);
   const taskTimeInputRef = useRef<HTMLInputElement>(null);
@@ -36,8 +37,7 @@ const TaskForm: React.FC = () => {
       date: taskDateInputRef.current!.value,
       time: taskTimeInputRef.current!.value,
     };
-
-    contextValue.addItems([newItem]);
+    dispatch(addAction(newItem));
     form.reset();
   };
 

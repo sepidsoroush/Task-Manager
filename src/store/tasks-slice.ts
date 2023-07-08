@@ -1,9 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import Task from "../models/tasks";
 
+// Define a type for the slice state
 interface tasksState {
   items: Task[];
 }
+
+// Define the initial state using that type
 const initialState: tasksState = {
   items: [],
 };
