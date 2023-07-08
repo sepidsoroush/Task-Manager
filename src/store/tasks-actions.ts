@@ -13,7 +13,17 @@ export function setDataAction() {
     axios
       .get(API_ENDPOINT)
       .then((response) => {
-        dispatch(tasksActions.setItems({ tasks: response.data }));
+        const dataObj = response.data;
+        const loadedData = [];
+        for (const key in dataObj) {
+          loadedData.push({
+            id: dataObj[key].id,
+            text: dataObj[key].text,
+            date: dataObj[key].date,
+            time: dataObj[key].time,
+          });
+        }
+        dispatch(tasksActions.setItems({ tasks: loadedData }));
       })
       .catch((error) => {
         console.log(error);

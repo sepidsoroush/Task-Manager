@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TaskItem from "./TaskItem";
-import { Flex } from "@mantine/core";
-import { useAppSelector } from "../../store/hooks";
+import { Flex, Loader } from "@mantine/core";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setDataAction } from "../../store/tasks-actions";
 
 const Tasks: React.FC = () => {
+  const dispatch = useAppDispatch();
   const items = useAppSelector((state) => state.tasks.items);
+  const isLoading = useAppSelector((state) => state.ui.loading);
+
+  useEffect(() => {
+    dispatch(setDataAction());
+  }, []);
 
   return (
     <Flex
@@ -14,9 +21,13 @@ const Tasks: React.FC = () => {
       direction="row"
       wrap="wrap"
     >
-      {items.map((item) => (
-        <TaskItem key={item.id} taskText={item.text} taskDate={item.date} />
-      ))}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        items.map((item) => (
+          <TaskItem key={item.id} taskText={item.text} taskDate={item.date} />
+        ))
+      )}
     </Flex>
   );
 };
