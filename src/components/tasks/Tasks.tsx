@@ -24,9 +24,7 @@ const Tasks: React.FC = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        items.map((item) => (
-          <TaskItem key={item.id} taskText={item.text} taskDate={item.date} />
-        ))
+        items.map((item) => <TaskItem key={item.id} task={item} />)
       )}
     </Flex>
   );
