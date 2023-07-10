@@ -8,6 +8,7 @@ const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((state) => state.tasks.items);
   const isLoading = useAppSelector((state) => state.ui.loading);
+  console.log(items);
 
   useEffect(() => {
     dispatch(setDataAction());

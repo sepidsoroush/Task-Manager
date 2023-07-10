@@ -18,9 +18,14 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import Task from "../../models/tasks";
 import TaskInfo from "./TaskInfo";
+import TaskEdit from "./TaskEdit";
+import TaskDelete from "./TaskDelete";
 
 const TaskItem: React.FC<{ task: Task }> = (props) => {
-  const [opened, { open, close }] = useDisclosure(false);
+  const [viewOpened, viewHandlers] = useDisclosure(false);
+  const [deleteOpened, deleteHandlers] = useDisclosure(false);
+  const [editOpened, editHandlers] = useDisclosure(false);
+
   const dateObj: Date = new Date(props.task.date);
   const newdate: string =
     dateObj.getFullYear() +
@@ -41,11 +46,23 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item icon={<IconEye size={rem(14)} />} onClick={open}>
+              <Menu.Item
+                icon={<IconEye size={rem(14)} />}
+                onClick={viewHandlers.open}
+              >
                 Preview
               </Menu.Item>
-              <Menu.Item icon={<IconPencil size={rem(14)} />}>Edit</Menu.Item>
-              <Menu.Item icon={<IconTrash size={rem(14)} />} color="red">
+              <Menu.Item
+                icon={<IconPencil size={rem(14)} />}
+                onClick={editHandlers.open}
+              >
+                Edit
+              </Menu.Item>
+              <Menu.Item
+                icon={<IconTrash size={rem(14)} />}
+                onClick={deleteHandlers.open}
+                color="red"
+              >
                 Delete
               </Menu.Item>
             </Menu.Dropdown>
@@ -57,8 +74,26 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
             </Badge>
           )}
         </Group>
-        <Modal opened={opened} onClose={close} title="Task's info">
+        <Modal
+          opened={viewOpened}
+          onClose={viewHandlers.close}
+          title="Task's info"
+        >
           <TaskInfo task={props.task} />
+        </Modal>
+        <Modal
+          opened={deleteOpened}
+          onClose={deleteHandlers.close}
+          withCloseButton={false}
+        >
+          <TaskDelete id={props.task.id} onClose={deleteHandlers.close} />
+        </Modal>
+        <Modal
+          opened={editOpened}
+          onClose={editHandlers.close}
+          title="Task's info"
+        >
+          <TaskEdit task={props.task} />
         </Modal>
       </Card.Section>
       <Text color="dimmed" size="sm" lineClamp={3} my="xs">

@@ -5,13 +5,13 @@ import { uiActions } from "./ui-slice";
 import Task from "../models/tasks";
 
 const API_ENDPOINT =
-  "https://task-manager-8e8a5-default-rtdb.firebaseio.com/tasks.json";
+  "https://task-manager-8e8a5-default-rtdb.firebaseio.com/tasks";
 
 export function setDataAction() {
   return (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
     axios
-      .get(API_ENDPOINT)
+      .get(`${API_ENDPOINT}.json`)
       .then((response) => {
         const dataObj = response.data;
         const loadedData = [];
@@ -37,7 +37,7 @@ export function setDataAction() {
 export function deleteAction(id: string) {
   return (dispatch: Dispatch) => {
     axios
-      .delete(`${API_ENDPOINT}/${id}`)
+      .delete(`${API_ENDPOINT}/${id}.json`)
       .then(() => {
         dispatch(tasksActions.deleteItem(id));
       })
@@ -48,8 +48,9 @@ export function deleteAction(id: string) {
 }
 export function addAction(task: Task) {
   return (dispatch: Dispatch) => {
+    const data = { ...task, id: task.id };
     axios
-      .post(`${API_ENDPOINT}`, task)
+      .post(`${API_ENDPOINT}.json`, data)
       .then(() => {
         dispatch(tasksActions.addItem(task));
       })
@@ -62,7 +63,7 @@ export function addAction(task: Task) {
 export function updateAction(id: string, task: Task) {
   return (dispatch: Dispatch) => {
     axios
-      .put(`${API_ENDPOINT}/${id}`, task)
+      .put(`${API_ENDPOINT}/${id}.json`, task)
       .then(() => {
         dispatch(tasksActions.updateItem({ id, task }));
       })

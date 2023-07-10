@@ -32,7 +32,7 @@ const TaskForm: React.FC = () => {
     event.preventDefault();
 
     const newItem: Task = {
-      id: new Date().toISOString(),
+      id: new Date().getTime().toString(),
       text: taskTextInputRef.current!.value,
       date: taskDateInputRef.current!.value,
       time: taskTimeInputRef.current!.value,
