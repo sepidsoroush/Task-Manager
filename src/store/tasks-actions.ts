@@ -34,20 +34,17 @@ export function setDataAction() {
   };
 }
 
-export function deleteAction(id: string) {
+export function deleteAction(taskID: string) {
   return (dispatch: Dispatch) => {
     axios
       .get(`${databaseURL}.json`)
       .then((response) => {
-        const items = response.data;
-        const keysToDelete = Object.keys(items).filter(
-          (key) => items[key] === id
+        const tasks = response.data;
+        const itemKey = Object.keys(tasks).find(
+          (key) => tasks[key].id === taskID
         );
-        const deleteRequests = keysToDelete.map((key) =>
-          axios.delete(`${databaseURL}/${key}.json`)
-        );
-        Promise.all(deleteRequests);
-        dispatch(tasksActions.deleteItem(id));
+        axios.delete(`${databaseURL}/${itemKey}.json`);
+        dispatch(tasksActions.deleteItem(taskID));
       })
       .catch((error) => {
         console.log(error);
