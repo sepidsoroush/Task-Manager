@@ -9,17 +9,15 @@ import { IconClock } from "@tabler/icons-react";
 import Task from "../../models/tasks";
 import { useAppDispatch } from "../../store/hooks";
 
-const TaskForm: React.FC = () => {
+const TaskForm: React.FC<{ onClose: () => void }> = (props) => {
   const dispatch = useAppDispatch();
-  const taskTextInputRef = useRef<HTMLInputElement>(null);
-  const taskDateInputRef = useRef<HTMLInputElement>(null);
   const taskTimeInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm({
     initialValues: {
       text: "",
-      date: "",
-      time: "",
+      date: null,
+      time: null,
     },
 
     // validate: {
@@ -33,12 +31,14 @@ const TaskForm: React.FC = () => {
 
     const newItem: Task = {
       id: new Date().getTime().toString(),
-      text: taskTextInputRef.current!.value,
-      date: taskDateInputRef.current!.value,
-      time: taskTimeInputRef.current!.value,
+      text: form.values.text,
+      date: form.values.date !== null ? new Date(form.values.date) : null,
+      time: form.values.time,
     };
+
     dispatch(addAction(newItem));
     form.reset();
+    props.onClose;
   };
 
   return (
@@ -48,14 +48,12 @@ const TaskForm: React.FC = () => {
           withAsterisk
           label="Task"
           placeholder="+ Add task"
-          ref={taskTextInputRef}
           my={10}
           {...form.getInputProps("text")}
         />
         <DateInput
           label="Pick date"
           placeholder="Pick date"
-          ref={taskDateInputRef}
           clearable
           mx="auto"
           my={10}

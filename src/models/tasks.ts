@@ -1,14 +1,14 @@
 class Task {
   id: string;
   text: string;
-  date: Date;
-  time: string;
+  date: Date | null;
+  time: string | null;
 
   constructor(
     taskID: string,
     taskText: string,
-    taskDate: Date,
-    taskTime: string
+    taskDate: Date | null,
+    taskTime: string | null
   ) {
     this.id = taskID;
     this.text = taskText;

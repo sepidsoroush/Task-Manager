@@ -14,10 +14,10 @@ const TaskDelete: React.FC<{ id: string; onClose: () => void }> = (props) => {
     <Box>
       <Text>Are you certain about deleting this task?</Text>
       <Group position="right" spacing="sm" mt={10}>
-        <Button color="red" variant="outline" onClick={deleteHandler}>
+        <Button color="red" variant="outline" compact onClick={deleteHandler}>
           Delete
         </Button>
-        <Button variant="outline" color="dark" onClick={props.onClose}>
+        <Button variant="outline" color="gray" compact onClick={props.onClose}>
           Cancel
         </Button>
       </Group>

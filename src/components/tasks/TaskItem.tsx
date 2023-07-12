@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   rem,
   Card,
@@ -26,13 +26,17 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
   const [deleteOpened, deleteHandlers] = useDisclosure(false);
   const [editOpened, editHandlers] = useDisclosure(false);
 
-  const dateObj: Date = new Date(props.task.date);
-  const newdate: string =
-    dateObj.getFullYear() +
-    "/" +
-    (dateObj.getMonth() + 1) +
-    "/" +
-    dateObj.getDate();
+  // const [newDate, setNewDate] = useState<string>("");
+  // const dateObj: Date | null = props.task.date;
+  // if (dateObj) {
+  //   setNewDate(
+  //     dateObj.getFullYear() +
+  //       "/" +
+  //       (dateObj.getMonth() + 1) +
+  //       "/" +
+  //       dateObj.getDate()
+  //   );
+  // }
 
   return (
     <Card w={150} shadow="sm" p="sm" radius="md" withBorder>
@@ -70,7 +74,7 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
 
           {props.task.date && (
             <Badge color="pink" variant="light" size="xs">
-              {newdate}
+              {props.task.date.toLocaleString()}
             </Badge>
           )}
         </Group>
@@ -93,7 +97,7 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
           onClose={editHandlers.close}
           title="Task's info"
         >
-          <TaskEdit task={props.task} />
+          <TaskEdit task={props.task} onClose={editHandlers.close} />
         </Modal>
       </Card.Section>
       <Text color="dimmed" size="sm" lineClamp={3} my="xs">

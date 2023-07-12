@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { TextInput, ActionIcon, Group, Button, Box } from "@mantine/core";
+import { ActionIcon, Group, Button, Box, Textarea } from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { updateAction } from "../../store/tasks-actions";
@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../store/hooks";
 import { IconClock } from "@tabler/icons-react";
 import Task from "../../models/tasks";
 
-const TaskEdit: React.FC<{ task: Task }> = (props) => {
+const TaskEdit: React.FC<{ task: Task; onClose: () => void }> = (props) => {
   const dispatch = useAppDispatch();
 
   const taskTimeInputRef = useRef<HTMLInputElement>(null);
@@ -34,17 +34,16 @@ const TaskEdit: React.FC<{ task: Task }> = (props) => {
   return (
     <Box>
       <form onSubmit={submitHandler}>
-        <TextInput
+        <Textarea
           withAsterisk
           label="Task"
-          defaultValue={props.task.text}
           my={10}
           {...form.getInputProps("text")}
         />
         <DateInput
           label="Pick date"
-          defaultValue={props.task.date}
           clearable
+          defaultValue={props.task.date || null}
           mx="auto"
           my={10}
           maw={400}
@@ -52,7 +51,7 @@ const TaskEdit: React.FC<{ task: Task }> = (props) => {
         />
         <TimeInput
           label="Pick Time"
-          defaultValue={props.task.time}
+          defaultValue={props.task.time || ""}
           ref={taskTimeInputRef}
           rightSection={
             <ActionIcon onClick={() => taskTimeInputRef.current!.showPicker()}>
@@ -64,8 +63,16 @@ const TaskEdit: React.FC<{ task: Task }> = (props) => {
           my={10}
         />
         <Group position="right">
-          <Button variant="subtle" color="green" compact>
+          <Button variant="outline" color="green" compact>
             Save
+          </Button>
+          <Button
+            variant="outline"
+            color="gray"
+            compact
+            onClick={props.onClose}
+          >
+            Cancel
           </Button>
         </Group>
       </form>

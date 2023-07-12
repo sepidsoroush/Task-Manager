@@ -9,7 +9,7 @@ const Kanban = () => {
   return (
     <Box>
       <Modal opened={opened} onClose={close} title="Add new task">
-        <TaskForm />
+        <TaskForm onClose={close} />
       </Modal>
       <Button onClick={open}>Add new task</Button>
 
