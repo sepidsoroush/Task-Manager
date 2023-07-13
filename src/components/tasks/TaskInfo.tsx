@@ -18,6 +18,14 @@ const TaskInfo: React.FC<{ task: Task }> = (props) => {
   return (
     <Box>
       <Textarea label="Task" defaultValue={props.task.text} disabled my={10} />
+      <TextInput
+        label="Status"
+        defaultValue={props.task.status}
+        disabled
+        mx="auto"
+        my={10}
+        maw={400}
+      />
       <Group>
         <TextInput
           label="Date"

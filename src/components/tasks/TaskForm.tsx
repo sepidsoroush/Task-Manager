@@ -18,6 +18,7 @@ const TaskForm: React.FC<{ onClose: () => void }> = (props) => {
       text: "",
       date: null,
       time: null,
+      status: "",
     },
 
     // validate: {
@@ -34,11 +35,12 @@ const TaskForm: React.FC<{ onClose: () => void }> = (props) => {
       text: form.values.text,
       date: form.values.date !== null ? new Date(form.values.date) : null,
       time: form.values.time,
+      status: "To Do",
     };
 
     dispatch(addAction(newItem));
     form.reset();
-    props.onClose;
+    props.onClose();
   };
 
   return (

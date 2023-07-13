@@ -21,6 +21,7 @@ export function setDataAction() {
             text: dataObj[key].text,
             date: dataObj[key].date,
             time: dataObj[key].time,
+            status: dataObj[key].status,
           });
         }
         dispatch(tasksActions.setItems({ tasks: loadedData }));
