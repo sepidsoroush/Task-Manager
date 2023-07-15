@@ -32,6 +32,7 @@ const tasksSlice = createSlice({
         existingItem.text = action.payload.task.text;
         existingItem.date = action.payload.task.date;
         existingItem.time = action.payload.task.time;
+        existingItem.status = action.payload.task.status;
       }
     },
   },
