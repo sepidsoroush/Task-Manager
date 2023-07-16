@@ -39,7 +39,7 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
   // }
 
   return (
-    <Card w={150} shadow="sm" p="sm" radius="md" withBorder>
+    <Card miw={150} mb={10} shadow="sm" p="sm" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
         <Group position="apart">
           <Menu withinPortal position="bottom-start" shadow="sm">

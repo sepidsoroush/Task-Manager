@@ -12,10 +12,7 @@ const Kanban = () => {
         <TaskForm onClose={close} />
       </Modal>
       <Button onClick={open}>Add new task</Button>
-
-      <Group my={10}>
-        <Tasks />
-      </Group>
+      <Tasks />
     </Box>
   );
 };
