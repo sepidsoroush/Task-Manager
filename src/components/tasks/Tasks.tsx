@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import TaskItem from "./TaskItem";
 import { Grid, Loader, Title } from "@mantine/core";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setDataAction } from "../../store/tasks-actions";
+import TaskItem from "./TaskItem";
+import TasksColumns from "./TasksCols";
 import Task from "../../models/tasks";
 
 const Tasks: React.FC = () => {
@@ -30,28 +31,13 @@ const Tasks: React.FC = () => {
       ) : (
         <Grid my={10}>
           <Grid.Col span={4}>
-            <Title order={2} mb={8}>
-              To do
-            </Title>
-            {todoItems.map((item) => (
-              <TaskItem key={item.id} task={item} />
-            ))}
+            <TasksColumns title="To Do" items={todoItems} />
           </Grid.Col>
           <Grid.Col span={4}>
-            <Title order={2} mb={8}>
-              Doing
-            </Title>
-            {doingItems.map((item) => (
-              <TaskItem key={item.id} task={item} />
-            ))}
+            <TasksColumns title="Doing" items={doingItems} />
           </Grid.Col>
           <Grid.Col span={4}>
-            <Title order={2} mb={8}>
-              Done
-            </Title>
-            {doneItems.map((item) => (
-              <TaskItem key={item.id} task={item} />
-            ))}
+            <TasksColumns title="Done" items={doneItems} />
           </Grid.Col>
         </Grid>
       )}
