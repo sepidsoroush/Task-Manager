@@ -1,15 +1,13 @@
 import { useRef } from "react";
-import { TextInput, Button, Group, Box } from "@mantine/core";
+import { TextInput, Button, Group, Box, ActionIcon } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { addAction } from "../../store/tasks-actions";
-import { DateInput } from "@mantine/dates";
-import { ActionIcon } from "@mantine/core";
-import { TimeInput } from "@mantine/dates";
+import { DateInput, TimeInput } from "@mantine/dates";
 import { IconClock } from "@tabler/icons-react";
-import Task from "../../models/tasks";
-import { useAppDispatch } from "../../store/hooks";
+import Task from "../models/tasks";
+import { useAppDispatch } from "../store/hooks";
+import { addAction } from "../store/tasks-actions";
 
-const TaskForm: React.FC = () => {
+const NewTask: React.FC = () => {
   const dispatch = useAppDispatch();
   const taskTimeInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +41,7 @@ const TaskForm: React.FC = () => {
   };
 
   return (
-    <Box maw={400} mx="auto">
+    <Box maw={400}>
       <form onSubmit={submitHandler}>
         <TextInput
           withAsterisk
@@ -81,4 +79,4 @@ const TaskForm: React.FC = () => {
     </Box>
   );
 };
-export default TaskForm;
+export default NewTask;

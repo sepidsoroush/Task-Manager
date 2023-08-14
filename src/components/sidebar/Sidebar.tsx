@@ -8,7 +8,16 @@ import {
   IconBellRinging,
   IconSettings,
   IconLogout,
+  IconPlus,
 } from "@tabler/icons-react";
+import { IconType } from "react-icons";
+
+interface LinkItemType {
+  id: number;
+  link: string;
+  label: string;
+  icon: IconType;
+}
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -79,11 +88,17 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const data = [
-  { link: "/", label: "Kanban", icon: IconLayoutKanban },
-  { link: "/calendar", label: "Calendar", icon: IconCalendar },
-  { link: "/notifications", label: "Notifications", icon: IconBellRinging },
-  { link: "/search", label: "Search", icon: IconSearch },
+const data: LinkItemType[] = [
+  { id: 1, link: "/", label: "Kanban", icon: IconLayoutKanban },
+  { id: 2, link: "/newtask", label: "New Task", icon: IconPlus },
+  { id: 3, link: "/calendar", label: "Calendar", icon: IconCalendar },
+  {
+    id: 4,
+    link: "/notifications",
+    label: "Notifications",
+    icon: IconBellRinging,
+  },
+  { id: 5, link: "/search", label: "Search", icon: IconSearch },
 ];
 
 const Sidebar = () => {
@@ -101,7 +116,7 @@ const Sidebar = () => {
         setActive(item.label);
       }}
     >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <item.icon className={classes.linkIcon} />
       <span>{item.label}</span>
     </Link>
   ));
