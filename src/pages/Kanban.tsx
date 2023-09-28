@@ -1,9 +1,15 @@
-import { Box } from "@mantine/core";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import Tasks from "../components/tasks/Tasks";
 
 const Kanban = () => {
   return (
-    <Box>
+    <Box
+      bg={useColorModeValue("white", "gray.900")}
+      w="full"
+      h="full"
+      px={6}
+      pos="fixed"
+    >
       <Tasks />
     </Box>
   );
