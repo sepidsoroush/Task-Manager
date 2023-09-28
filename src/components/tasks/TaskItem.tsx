@@ -18,7 +18,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import Task from "../../models/tasks";
 import TaskInfo from "./TaskInfo";
-import TaskEdit from "./TaskEdit";
+// import TaskEdit from "./TaskEdit";
 import TaskDelete from "./TaskDelete";
 
 const TaskItem: React.FC<{ task: Task }> = (props) => {
@@ -97,7 +97,7 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
           onClose={editHandlers.close}
           title="Task's info"
         >
-          <TaskEdit task={props.task} onClose={editHandlers.close} />
+          {/* <TaskEdit task={props.task} onClose={editHandlers.close} /> */}
         </Modal>
       </Card.Section>
       <Text color="dimmed" size="sm" lineClamp={3} my="xs">
