@@ -1,16 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { createStyles, Navbar, getStylesRef, rem } from "@mantine/core";
+import {
+  createStyles,
+  Navbar,
+  getStylesRef,
+  rem,
+  Button,
+  Text,
+} from "@mantine/core";
 import {
   IconLayoutKanban,
-  IconCalendar,
-  IconSearch,
-  IconBellRinging,
-  IconSettings,
-  IconLogout,
   IconPlus,
+  IconEyeOff,
+  IconEye,
 } from "@tabler/icons-react";
 import { IconType } from "react-icons";
+import ToggleMode from "../mode/ToggleMode";
 
 interface LinkItemType {
   id: number;
@@ -91,14 +96,6 @@ const useStyles = createStyles((theme) => ({
 const data: LinkItemType[] = [
   { id: 1, link: "/", label: "Kanban", icon: IconLayoutKanban },
   { id: 2, link: "/newtask", label: "New Task", icon: IconPlus },
-  { id: 3, link: "/calendar", label: "Calendar", icon: IconCalendar },
-  {
-    id: 4,
-    link: "/notifications",
-    label: "Notifications",
-    icon: IconBellRinging,
-  },
-  { id: 5, link: "/search", label: "Search", icon: IconSearch },
 ];
 
 const Sidebar = () => {
@@ -123,18 +120,13 @@ const Sidebar = () => {
 
   return (
     <Navbar height="100vh" width={{ sm: 300 }} p="md">
+      <Text size="md">All Boards</Text>
       <Navbar.Section grow>{links}</Navbar.Section>
-
       <Navbar.Section className={classes.footer}>
-        <Link to="/settings" className={classes.link}>
-          <IconSettings className={classes.linkIcon} stroke={1.5} />
-          <span>Setting</span>
-        </Link>
-
-        <Link to="/authentication" className={classes.link}>
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </Link>
+        <ToggleMode />
+        <Button>
+          <IconEyeOff /> Hide Sidebar
+        </Button>
       </Navbar.Section>
     </Navbar>
   );
