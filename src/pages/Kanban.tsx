@@ -4,7 +4,7 @@ import Tasks from "../components/tasks/Tasks";
 const Kanban = () => {
   return (
     <Box
-      bg={useColorModeValue("white", "gray.900")}
+      bg={useColorModeValue("#f4f7fd", "#20212c")}
       w="full"
       h="full"
       px={6}

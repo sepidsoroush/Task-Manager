@@ -5,9 +5,9 @@ import Sidebar from "../components/sidebar/Sidebar";
 function RootLayout() {
   return (
     <React.Fragment>
-      <Sidebar />
       <main>
         <Outlet />
+        <Sidebar />
       </main>
     </React.Fragment>
   );

@@ -9,7 +9,6 @@ import {
   Drawer,
   DrawerContent,
   DrawerOverlay,
-  DrawerHeader,
   DrawerFooter,
   useDisclosure,
   BoxProps,
@@ -85,12 +84,11 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
       <Flex
         align="center"
         p="4"
-        mx="4"
         borderRadius="lg"
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "teal.400",
           color: "white",
         }}
         {...rest}
@@ -155,8 +153,14 @@ const Sidebar = () => {
         size="lg"
         icon={<IconEye />}
         onClick={onOpen}
+        style={{
+          position: "absolute",
+          top: "568px",
+          width: "56px",
+          height: "40px",
+          borderRadius: "0 50px 50px 0",
+        }}
       />
-
       <Drawer
         isOpen={isOpen}
         placement="left"
@@ -167,11 +171,6 @@ const Sidebar = () => {
         <DrawerOverlay />
 
         <DrawerContent>
-          <DrawerHeader>
-            <Text fontSize="4xl" fontWeight="bold">
-              Kanban
-            </Text>
-          </DrawerHeader>
           <DrawerBody>
             <SidebarContent onClose={onClose} />
           </DrawerBody>

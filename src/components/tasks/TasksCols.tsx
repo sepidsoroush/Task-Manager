@@ -1,23 +1,25 @@
 import React from "react";
-import { Title, Card, Text } from "@mantine/core";
+import { Card, CardHeader, CardBody, Text } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
 import Task from "../../models/tasks";
 
 const TasksColumns: React.FC<{ items: Task[]; title: string }> = (props) => {
   return (
-    <Card>
-      <Card.Section withBorder inheritPadding py={5} my={10}>
-        <Title order={2} color="gray">
+    <Card minH="full" backgroundColor="transparent" shadow="none">
+      <CardHeader py={0} my={0}>
+        <Text size="base" fontWeight="semibold" color="gray.500">
           {props.title}
-        </Title>
-      </Card.Section>
-      {props.items.length === 0 ? (
-        <Text fz="lg" color="gray">
-          No tasks to display
         </Text>
-      ) : (
-        props.items.map((item) => <TaskItem key={item.id} task={item} />)
-      )}
+      </CardHeader>
+      <CardBody>
+        {props.items.length === 0 ? (
+          <Text fontSize="lg" color="gray.500">
+            No tasks to display
+          </Text>
+        ) : (
+          props.items.map((item) => <TaskItem key={item.id} task={item} />)
+        )}
+      </CardBody>
     </Card>
   );
 };
