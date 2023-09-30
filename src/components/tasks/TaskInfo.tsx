@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { TextInput, Textarea, Box, Group } from "@mantine/core";
+import { Text, Input, Textarea, Box, InputGroup } from "@chakra-ui/react";
 
 import Task from "../../models/tasks";
 
 const TaskInfo: React.FC<{ task: Task }> = (props) => {
-  const [newDate, setNewDate] = useState("");
+  const [newDate, setNewDate] = useState<string>("");
   const dateObj: Date | null = props.task.date;
   if (dateObj) {
     setNewDate(
@@ -15,35 +15,36 @@ const TaskInfo: React.FC<{ task: Task }> = (props) => {
         dateObj.getDate()
     );
   }
+  
   return (
     <Box>
-      <Textarea label="Task" defaultValue={props.task.text} disabled my={10} />
-      <TextInput
-        label="Status"
-        defaultValue={props.task.status}
-        disabled
-        mx="auto"
-        my={10}
-        maw={400}
-      />
-      <Group>
-        <TextInput
-          label="Date"
-          defaultValue={props.task.date ? newDate : ""}
-          disabled
-          mx="auto"
-          my={10}
-          maw={400}
-        />
-        <TextInput
-          label="Time"
-          defaultValue={props.task.time || ""}
-          disabled
-          maw={400}
-          mx="auto"
-          my={10}
-        />
-      </Group>
+      <Box my={5}>
+        <Text mb={1} fontSize="sm" color="gray.500" fontWeight="medium">
+          Title
+        </Text>
+        <Textarea defaultValue={props.task.text} />
+      </Box>
+      <Box mx="auto" my={5}>
+        <Text mb={1} fontSize="sm" color="gray.500" fontWeight="medium">
+          Current status
+        </Text>
+        <Input defaultValue={props.task.status} />
+      </Box>
+
+      <InputGroup my={5} gap={5}>
+        <Box>
+          <Text mb={1} fontSize="sm" color="gray.500" fontWeight="medium">
+            Date
+          </Text>
+          <Input defaultValue={props.task.date ? newDate : ""} />
+        </Box>
+        <Box>
+          <Text mb={1} fontSize="sm" color="gray.500" fontWeight="medium">
+            Time
+          </Text>
+          <Input defaultValue={props.task.time || ""} />
+        </Box>
+      </InputGroup>
     </Box>
   );
 };
