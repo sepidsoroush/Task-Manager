@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Grid, Loader, Title } from "@mantine/core";
+import { Grid, GridItem, Spinner } from "@chakra-ui/react";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setDataAction } from "../../store/tasks-actions";
-import TaskItem from "./TaskItem";
 import TasksColumns from "./TasksCols";
 import Task from "../../models/tasks";
 
@@ -27,18 +26,18 @@ const Tasks: React.FC = () => {
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <Spinner />
       ) : (
-        <Grid my={10}>
-          <Grid.Col span={4}>
+        <Grid templateColumns="repeat(3, 1fr)" gap={6} p={8}>
+          <GridItem>
             <TasksColumns title="To Do" items={todoItems} />
-          </Grid.Col>
-          <Grid.Col span={4}>
+          </GridItem>
+          <GridItem>
             <TasksColumns title="Doing" items={doingItems} />
-          </Grid.Col>
-          <Grid.Col span={4}>
+          </GridItem>
+          <GridItem>
             <TasksColumns title="Done" items={doneItems} />
-          </Grid.Col>
+          </GridItem>
         </Grid>
       )}
     </>
