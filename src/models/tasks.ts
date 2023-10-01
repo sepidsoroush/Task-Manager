@@ -1,15 +1,15 @@
 class Task {
   id: string;
   text: string;
-  date: Date | null;
-  time: string | null;
+  date: string | undefined;
+  time: string | undefined;
   status: string;
 
   constructor(
     taskID: string,
     taskText: string,
-    taskDate: Date | null,
-    taskTime: string | null,
+    taskDate: string | undefined,
+    taskTime: string | undefined,
     taskStatus: string
   ) {
     this.id = taskID;
@@ -19,5 +19,13 @@ class Task {
     this.status = taskStatus;
   }
 }
+
+export const emptyTask = {
+  id: "",
+  text: "",
+  date: undefined,
+  time: "",
+  status: "",
+};
 
 export default Task;
