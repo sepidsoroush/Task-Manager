@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { tasksActions } from "./tasks-slice";
-import { uiActions } from "./ui-slice";
+import { tasksActions } from "./features/tasks-slice";
+import { uiActions } from "./features/ui-slice";
 import Task from "../models/tasks";
 
 const databaseURL =
