@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NavItem } from "@/models/sidebar";
-import ToggleMode from "./ToggleMode";
+import { ModeToggle } from "../theme/ModeToggle";
 import SidebarItem from "./SidebarItem";
 import { IconMenu2 } from "@tabler/icons-react";
 
@@ -35,7 +35,7 @@ export function MobileSidebar({ links }: Props) {
           ))}
         </div>
         <SheetFooter>
-          <ToggleMode />
+          <ModeToggle />
         </SheetFooter>
       </SheetContent>
     </Sheet>

@@ -1,3 +1,4 @@
+import { ModeToggle } from "../theme/ModeToggle";
 import SidebarItem from "./SidebarItem";
 import { SIDEBAR } from "@/utils/siteInfo";
 
@@ -10,6 +11,7 @@ const Sidebar = () => {
       {SIDEBAR.map((item, index) => {
         return <SidebarItem key={index} link={item} />;
       })}
+      <ModeToggle />
     </nav>
   );
 };
