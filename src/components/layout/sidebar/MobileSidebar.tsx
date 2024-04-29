@@ -2,9 +2,7 @@ import { Button } from "@/components/ui/button";
 
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -13,6 +11,7 @@ import {
 import { NavItem } from "@/models/sidebar";
 import ToggleMode from "./ToggleMode";
 import SidebarItem from "./SidebarItem";
+import { IconMenu2 } from "@tabler/icons-react";
 
 type Props = {
   links: NavItem[];
@@ -22,20 +21,19 @@ export function MobileSidebar({ links }: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button variant="ghost">
+          <IconMenu2 />
+        </Button>
       </SheetTrigger>
-      <SheetClose asChild>
-        <Button type="submit">Close</Button>
-      </SheetClose>
       <SheetContent side="left">
         <SheetHeader>
-          <SheetTitle>Mobile Sidebar</SheetTitle>
-          {/* <SheetDescription>Mobile Sidebar</SheetDescription> */}
+          <SheetTitle>All boards (3)</SheetTitle>
         </SheetHeader>
-        {links.map((link) => (
-          <SidebarItem key={link.name} link={link} />
-        ))}
-
+        <div className="grid items-start gap-4">
+          {links.map((link) => (
+            <SidebarItem key={link.name} link={link} />
+          ))}
+        </div>
         <SheetFooter>
           <ToggleMode />
         </SheetFooter>
