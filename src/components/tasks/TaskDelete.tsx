@@ -1,5 +1,12 @@
 import React from "react";
-import { Button, Box, Text, Group } from "@mantine/core";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "../../store/hooks";
 import { deleteAction } from "../../store/tasks-actions";
 
@@ -11,17 +18,20 @@ const TaskDelete: React.FC<{ id: string; onClose: () => void }> = (props) => {
   };
 
   return (
-    <Box>
-      <Text>Are you certain about deleting this task?</Text>
-      <Group position="right" spacing="sm" mt={10}>
-        <Button color="red" variant="outline" compact onClick={deleteHandler}>
-          Delete
-        </Button>
-        <Button variant="outline" color="gray" compact onClick={props.onClose}>
-          Cancel
-        </Button>
-      </Group>
-    </Box>
+    <Dialog>
+      <DialogTrigger>Delete</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>Are you certain about deleting this task?</DialogHeader>
+        <DialogFooter>
+          <Button color="red" variant="outline" onClick={deleteHandler}>
+            Delete
+          </Button>
+          <Button variant="outline" color="gray" onClick={props.onClose}>
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

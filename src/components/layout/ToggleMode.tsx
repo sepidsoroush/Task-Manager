@@ -1,8 +1,8 @@
 import React from "react";
-import { Box } from "@mantine/core";
+import { Button } from "@/components/ui/button";
 
 const ToggleMode: React.FC = () => {
-  return <Box>Toggle Mode</Box>;
+  return <Button>Toggle Mode</Button>;
 };
 
 export default ToggleMode;
