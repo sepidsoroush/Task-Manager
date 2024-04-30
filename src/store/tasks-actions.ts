@@ -18,9 +18,9 @@ export function setDataAction() {
         for (const key in dataObj) {
           loadedData.push({
             id: dataObj[key].id,
-            text: dataObj[key].text,
+            title: dataObj[key].title,
+            description: dataObj[key].description,
             date: dataObj[key].date,
-            time: dataObj[key].time,
             status: dataObj[key].status,
           });
         }

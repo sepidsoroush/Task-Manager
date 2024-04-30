@@ -29,9 +29,9 @@ const tasksSlice = createSlice({
         (row) => row.id === action.payload.id
       );
       if (existingItem) {
-        existingItem.text = action.payload.task.text;
+        existingItem.title = action.payload.task.title;
+        existingItem.description = action.payload.task.description;
         existingItem.date = action.payload.task.date;
-        existingItem.time = action.payload.task.time;
         existingItem.status = action.payload.task.status;
       }
     },

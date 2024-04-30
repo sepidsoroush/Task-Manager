@@ -1,5 +1,5 @@
 import MoreInfoButton from "./MoreInfoButton";
-import AddTaskButton from "./AddTaskButton";
+import NewTask from "@/components/tasks/NewTask";
 import { Logo } from "../../Auth/Logo";
 import { MobileSidebar } from "../sidebar/MobileSidebar";
 import { SIDEBAR } from "@/utils/siteInfo";
@@ -15,7 +15,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex flex-row justify-start items-center gap-1">
-          <AddTaskButton />
+          <NewTask />
           <MoreInfoButton />
           <div className="grid md:hidden">
             <MobileSidebar links={SIDEBAR} />

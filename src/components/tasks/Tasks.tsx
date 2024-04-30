@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Grid, GridItem, Spinner } from "@chakra-ui/react";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setDataAction } from "../../store/tasks-actions";
 import TasksColumns from "./TasksCols";
@@ -21,24 +21,24 @@ const Tasks: React.FC = () => {
 
   useEffect(() => {
     dispatch(setDataAction());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       {isLoading ? (
-        <Spinner />
+        <LoadingSpinner />
       ) : (
-        <Grid templateColumns="repeat(3, 1fr)" gap={6} p={8}>
-          <GridItem>
+        <div className="grid grid-cols-3 gap-6 p-8">
+          <div className="grid-item">
             <TasksColumns title="To Do" items={todoItems} />
-          </GridItem>
-          <GridItem>
+          </div>
+          <div className="grid-item">
             <TasksColumns title="Doing" items={doingItems} />
-          </GridItem>
-          <GridItem>
+          </div>
+          <div className="grid-item">
             <TasksColumns title="Done" items={doneItems} />
-          </GridItem>
-        </Grid>
+          </div>
+        </div>
       )}
     </>
   );
