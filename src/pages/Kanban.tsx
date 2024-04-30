@@ -1,12 +1,7 @@
-import { Card } from "@/components/ui/card";
-import Tasks from "../components/tasks/Tasks";
+import Tasks from "@/components/tasks/Tasks";
 
 const Kanban = () => {
-  return (
-    <Card>
-      <Tasks />
-    </Card>
-  );
+  return <Tasks />;
 };
 
 export default Kanban;

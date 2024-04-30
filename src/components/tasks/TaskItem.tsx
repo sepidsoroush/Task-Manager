@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,14 +17,12 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Card>
-          <CardHeader>
-            <div className="text-base font-medium break-normal">
-              {props.task.title}
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-xs mt-3">{props.task.description}</div>
+        <Card className="text-left">
+          <CardTitle className="text-base p-2 md:p-4">
+            {props.task.title}
+          </CardTitle>
+          <CardContent className="text-xs">
+            {props.task.description}
           </CardContent>
         </Card>
       </DialogTrigger>
