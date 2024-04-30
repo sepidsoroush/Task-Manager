@@ -8,12 +8,13 @@ A task manager made by Reactjs and TypeScript.
 ## Features
 
 - [x] Create, Read, Update, and Delete tasks (CRUD app)
+- [ ] Handle multiple Kanban Boards
 - [ ] Manage tasks in the Kanban tool
 - [ ] Calendar view
 - [x] Set date and time for tasks
-- [ ] Set Status for tasks (To Do, Doing, Done)
+- [x] Set Status for tasks (To Do, Doing, Done)
 - [ ] Authentication for login/ logout
-- [ ] light/ dark theme
+- [x] light/ dark theme
 
 ## Stacks
 

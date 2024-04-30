@@ -1,6 +1,6 @@
 import MoreInfoButton from "./MoreInfoButton";
 import NewTask from "@/components/tasks/NewTask";
-import { Logo } from "../../Auth/Logo";
+import { Logo } from "@/components/shared/Logo";
 import { MobileSidebar } from "../sidebar/MobileSidebar";
 import { SIDEBAR } from "@/utils/siteInfo";
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import TasksColumns from "./TasksCols";
+import TasksColumns from "../components/tasks/TasksCols";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setDataAction } from "@/store/tasks-actions";
