@@ -1,13 +1,15 @@
 import React, { useEffect } from "react";
-import { Grid, GridItem, Spinner } from "@chakra-ui/react";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setDataAction } from "../../store/tasks-actions";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import TasksColumns from "./TasksCols";
-import Task from "../../models/tasks";
+
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setDataAction } from "@/store/tasks-actions";
+import Task from "@/models/tasks";
 
 const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector<Task[]>((state) => state.tasks.items);
+
   const isLoading = useAppSelector<boolean>((state) => state.ui.loading);
   const todoItems: Task[] | null = items.filter(
     (item) => item.status === "To Do"
@@ -21,24 +23,22 @@ const Tasks: React.FC = () => {
 
   useEffect(() => {
     dispatch(setDataAction());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       {isLoading ? (
-        <Spinner />
+        <LoadingSpinner />
       ) : (
-        <Grid templateColumns="repeat(3, 1fr)" gap={6} p={8}>
-          <GridItem>
-            <TasksColumns title="To Do" items={todoItems} />
-          </GridItem>
-          <GridItem>
-            <TasksColumns title="Doing" items={doingItems} />
-          </GridItem>
-          <GridItem>
-            <TasksColumns title="Done" items={doneItems} />
-          </GridItem>
-        </Grid>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-2 p-2 md:p-4">
+          <TasksColumns title="To Do" items={todoItems} color="bg-blue-300" />
+          <TasksColumns
+            title="Doing"
+            items={doingItems}
+            color="bg-violet-300"
+          />
+          <TasksColumns title="Done" items={doneItems} color="bg-green-300" />
+        </div>
       )}
     </>
   );

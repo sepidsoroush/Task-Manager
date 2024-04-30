@@ -1,10 +1,12 @@
 # Task-Manager
-A task manager made by Reactjs and TypeScript. 
+
+A task manager made by Reactjs and TypeScript.
 
 > **Warning**
 > This is a work in progress. I'm building this in public.
 
 ## Features
+
 - [x] Create, Read, Update, and Delete tasks (CRUD app)
 - [ ] Manage tasks in the Kanban tool
 - [ ] Calendar view
@@ -14,11 +16,11 @@ A task manager made by Reactjs and TypeScript.
 - [ ] light/ dark theme
 
 ## Stacks
+
 - [React](https://react.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Redux Toolkit](https://redux-toolkit.js.org/)
-- [mantine-ui](https://mantine.dev/)
+- [shadcn/ui](https://ui.shadcn.com/)
 - [React Router](https://reactrouter.com/en/main)
 - [Vite](https://vitejs.dev/)
 - [Firebase](https://firebase.google.com/)
-
