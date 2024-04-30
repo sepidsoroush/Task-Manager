@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Dialog,
@@ -12,8 +12,10 @@ import TaskForm from "./TaskForm";
 import Task from "@/models/tasks";
 
 const TaskItem: React.FC<{ task: Task }> = (props) => {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Card>
           <CardHeader>
@@ -30,7 +32,11 @@ const TaskItem: React.FC<{ task: Task }> = (props) => {
         <DialogHeader>
           <DialogTitle>Task's info</DialogTitle>
         </DialogHeader>
-        <TaskForm actionType="update" taskToUpdate={props.task} />
+        <TaskForm
+          actionType="update"
+          taskToUpdate={props.task}
+          onOpenChange={setOpen}
+        />
       </DialogContent>
     </Dialog>
   );

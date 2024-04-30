@@ -1,5 +1,7 @@
 "use client";
 
+import { Dispatch, SetStateAction } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
@@ -45,6 +47,7 @@ type ActionType = "create" | "update";
 interface TaskFormProps {
   actionType: ActionType;
   taskToUpdate?: Task;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
 }
 
 const formSchema = z.object({
@@ -66,7 +69,11 @@ const formSchema = z.object({
   status: z.string(),
 });
 
-const TaskForm = ({ actionType, taskToUpdate }: TaskFormProps) => {
+const TaskForm = ({
+  actionType,
+  taskToUpdate,
+  onOpenChange,
+}: TaskFormProps) => {
   const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -96,6 +103,7 @@ const TaskForm = ({ actionType, taskToUpdate }: TaskFormProps) => {
     }
 
     form.reset();
+    onOpenChange(false);
   }
 
   const onDelete = () => {

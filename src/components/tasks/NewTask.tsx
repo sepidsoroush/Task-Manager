@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,8 +11,10 @@ import TaskForm from "@/components/tasks/TaskForm";
 import { IconPlus } from "@tabler/icons-react";
 
 const NewTask: React.FC = () => {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button variant="default" className="gap-1">
           <IconPlus />
@@ -23,7 +25,7 @@ const NewTask: React.FC = () => {
         <DialogHeader>
           <DialogTitle>Add new task</DialogTitle>
         </DialogHeader>
-        <TaskForm actionType="create" />
+        <TaskForm actionType="create" onOpenChange={setOpen} />
       </DialogContent>
     </Dialog>
   );
