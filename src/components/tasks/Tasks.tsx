@@ -8,6 +8,7 @@ import Task from "../../models/tasks";
 const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector<Task[]>((state) => state.tasks.items);
+
   const isLoading = useAppSelector<boolean>((state) => state.ui.loading);
   const todoItems: Task[] | null = items.filter(
     (item) => item.status === "To Do"

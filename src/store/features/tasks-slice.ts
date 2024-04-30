@@ -25,14 +25,10 @@ const tasksSlice = createSlice({
       state.items = state.items.concat(action.payload);
     },
     updateItem(state, action: PayloadAction<{ id: string; task: Task }>) {
-      const existingItem = state.items.find(
-        (row) => row.id === action.payload.id
-      );
-      if (existingItem) {
-        existingItem.title = action.payload.task.title;
-        existingItem.description = action.payload.task.description;
-        existingItem.date = action.payload.task.date;
-        existingItem.status = action.payload.task.status;
+      const { id, task } = action.payload;
+      const index = state.items.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        state.items[index] = task;
       }
     },
   },

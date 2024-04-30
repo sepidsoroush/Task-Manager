@@ -14,6 +14,8 @@ export function setDataAction() {
       .get(`${databaseURL}.json`)
       .then((response) => {
         const dataObj = response.data;
+        console.log(dataObj);
+
         const loadedData = [];
         for (const key in dataObj) {
           loadedData.push({
@@ -52,6 +54,7 @@ export function deleteAction(taskID: string) {
       });
   };
 }
+
 export function addAction(task: Task) {
   return (dispatch: Dispatch) => {
     axios
@@ -68,12 +71,28 @@ export function addAction(task: Task) {
 export function updateAction(id: string, task: Task) {
   return (dispatch: Dispatch) => {
     axios
-      .put(`${databaseURL}/${id}.json`, task)
-      .then(() => {
-        dispatch(tasksActions.updateItem({ id, task }));
+      .get(`${databaseURL}.json`)
+      .then((response) => {
+        const dataObj = response.data;
+        const key = Object.keys(dataObj).find(
+          (dataKey) => dataObj[dataKey].id === id
+        );
+        if (key) {
+          axios
+            .put(`${databaseURL}/${key}.json`, task)
+            .then(() => {
+              dispatch(tasksActions.updateItem({ id, task }));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log("Task not found in database.");
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 }
+
