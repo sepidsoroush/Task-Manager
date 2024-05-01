@@ -1,4 +1,4 @@
-import { ModeToggle } from "../theme/ModeToggle";
+import { ModeToggle } from "../theme/ModeToggleSwitch";
 import SidebarItem from "./SidebarItem";
 import { SIDEBAR } from "@/utils/siteInfo";
 

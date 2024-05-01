@@ -16,9 +16,11 @@ const NewTask: React.FC = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button variant="default" className="gap-1">
-          <IconPlus />
-          <span className="hidden md:inline text-base">Add new task</span>
+        <Button className="gap-1">
+          <IconPlus size={18} />
+          <span className="hidden md:inline text-base font-light">
+            Add new task
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent>

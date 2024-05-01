@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NavItem } from "@/models/sidebar";
-import { ModeToggle } from "../theme/ModeToggle";
+import { ModeToggle } from "../theme/ModeToggleSwitch";
 import SidebarItem from "./SidebarItem";
 import { IconMenu2 } from "@tabler/icons-react";
 

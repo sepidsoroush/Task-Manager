@@ -1,3 +1,5 @@
+// mode toggle component #2 (switch)
+
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "./ThemeProvider";
