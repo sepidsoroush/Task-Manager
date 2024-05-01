@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setDataAction } from "@/store/tasks-actions";
 import Task from "@/models/tasks";
 
+import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
+
 const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector<Task[]>((state) => state.tasks.items);
@@ -30,14 +32,14 @@ const Tasks: React.FC = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-2 p-2 md:p-4">
-          <TasksColumns title="To Do" items={todoItems} color="bg-blue-300" />
+        <div className="grid grid-cols-1 md:grid-cols-3 items-baseline gap-4 md:gap-2 p-2 md:p-4">
           <TasksColumns
-            title="Doing"
-            items={doingItems}
-            color="bg-violet-300"
+            title="To Do"
+            items={todoItems}
+            Icon={IconPlayerPause}
           />
-          <TasksColumns title="Done" items={doneItems} color="bg-green-300" />
+          <TasksColumns title="Doing" items={doingItems} Icon={IconRun} />
+          <TasksColumns title="Done" items={doneItems} Icon={IconCircleCheck} />
         </div>
       )}
     </>
