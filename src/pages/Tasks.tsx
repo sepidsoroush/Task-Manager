@@ -30,7 +30,13 @@ const Tasks: React.FC = () => {
   return (
     <>
       {isLoading ? (
-        <LoadingSpinner />
+        <div className="w-full h-screen flex items-center place-content-center">
+          <LoadingSpinner
+            width={96}
+            height={96}
+            className="flex items-center place-content-center"
+          />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 items-baseline gap-4 md:gap-2 p-2 md:p-4">
           <TasksColumns
