@@ -4,8 +4,7 @@ import { tasksActions } from "./features/tasks-slice";
 import { uiActions } from "./features/ui-slice";
 import Task from "../models/tasks";
 
-const databaseURL =
-  "https://task-manager-8e8a5-default-rtdb.firebaseio.com/tasks";
+const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
 export function setDataAction() {
   return (dispatch: Dispatch) => {
@@ -37,18 +36,33 @@ export function setDataAction() {
 
 export function deleteAction(taskID: string) {
   return (dispatch: Dispatch) => {
+    dispatch(uiActions.setLoading(true));
+
     axios
       .get(`${databaseURL}.json`)
       .then((response) => {
-        const tasks = response.data;
-        const itemKey = Object.keys(tasks).find(
-          (key) => tasks[key].id === taskID
+        const dataObj = response.data;
+        const key = Object.keys(dataObj).find(
+          (key) => dataObj[key].id === taskID
         );
-        axios.delete(`${databaseURL}/${itemKey}.json`);
-        dispatch(tasksActions.deleteItem(taskID));
+        if (key) {
+          axios
+            .delete(`${databaseURL}/${key}.json`)
+            .then(() => {
+              dispatch(tasksActions.deleteItem(taskID));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log("Task not found in database.");
+        }
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        dispatch(uiActions.setLoading(false));
       });
   };
 }
@@ -68,6 +82,8 @@ export function addAction(task: Task) {
 
 export function updateAction(id: string, task: Task) {
   return (dispatch: Dispatch) => {
+    dispatch(uiActions.setLoading(true));
+
     axios
       .get(`${databaseURL}.json`)
       .then((response) => {
@@ -90,6 +106,9 @@ export function updateAction(id: string, task: Task) {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        dispatch(uiActions.setLoading(false));
       });
   };
 }
