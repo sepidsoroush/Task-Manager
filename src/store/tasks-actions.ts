@@ -4,7 +4,8 @@ import { tasksActions } from "./features/tasks-slice";
 import { uiActions } from "./features/ui-slice";
 import Task from "../models/tasks";
 
-const databaseURL = import.meta.env.VITE_DATABASE_URL;
+const databaseURL =
+  "https://task-manager-8e8a5-default-rtdb.firebaseio.com/tasks";
 
 export function setDataAction() {
   return (dispatch: Dispatch) => {
