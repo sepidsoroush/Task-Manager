@@ -4,8 +4,7 @@ import { tasksActions } from "./features/tasks-slice";
 import { uiActions } from "./features/ui-slice";
 import Task from "../models/tasks";
 
-const databaseURL =
-  "https://task-manager-8e8a5-default-rtdb.firebaseio.com/tasks";
+const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
 export function setDataAction() {
   return (dispatch: Dispatch) => {
@@ -14,8 +13,6 @@ export function setDataAction() {
       .get(`${databaseURL}.json`)
       .then((response) => {
         const dataObj = response.data;
-        console.log(dataObj);
-
         const loadedData = [];
         for (const key in dataObj) {
           loadedData.push({
@@ -95,4 +92,3 @@ export function updateAction(id: string, task: Task) {
       });
   };
 }
-
