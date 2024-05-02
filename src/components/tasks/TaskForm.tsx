@@ -65,7 +65,7 @@ const formSchema = z.object({
       message: "Description must not be longer than 160 characters.",
     })
     .optional(),
-  date: z.date(),
+  date: z.date().optional(),
   status: z.string(),
 });
 
@@ -81,7 +81,6 @@ const TaskForm = ({
     defaultValues: {
       title: "",
       description: "",
-      date: new Date(),
       status: "To Do",
       ...(taskToUpdate && taskToUpdate), // Set default values if updating
     },
@@ -177,9 +176,6 @@ const TaskForm = ({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
                     initialFocus
                   />
                 </PopoverContent>
@@ -211,14 +207,16 @@ const TaskForm = ({
             </FormItem>
           )}
         />
-        {actionType === "update" ? (
-          <Button variant="destructive" onClick={onDelete}>
-            Delete
+        <div className="space-x-4 text-right">
+          <Button type="submit">
+            {actionType === "create" ? "Add Task" : "Update Task"}
           </Button>
-        ) : null}
-        <Button type="submit">
-          {actionType === "create" ? "Add Task" : "Update Task"}
-        </Button>
+          {actionType === "update" ? (
+            <Button variant="destructive" onClick={onDelete}>
+              Delete
+            </Button>
+          ) : null}
+        </div>
       </form>
     </Form>
   );
