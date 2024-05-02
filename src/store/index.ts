@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tasksSlice from "./features/tasks-slice";
 import uiSlice from "./features/ui-slice";
-import authSlice from "./features/auth-slice";
 
 const store = configureStore({
   reducer: {
     tasks: tasksSlice.reducer,
     ui: uiSlice.reducer,
-    auth: authSlice.reducer,
   },
 });
 export default store;
