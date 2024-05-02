@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
@@ -17,12 +17,17 @@ type Props = {
 const TasksColumns = ({ title, items, Icon }: Props) => {
   return (
     <Card>
-      <CardHeader className="text-base md:text-lg semibold flex flex-row justify-start items-center gap-2 border-t-6 sticky top-0 z-10">
-        <Icon size={18} />
-        {title} <Badge variant="outline">{items.length}</Badge>
+      <CardHeader className="bg-primary text-secondary rounded-t-lg">
+        <CardTitle className="text-base md:text-lg semibold flex flex-row justify-start items-center gap-2">
+          <Icon size={18} />
+          {title}
+          <Badge variant="outline" className="text-secondary">
+            {items.length}
+          </Badge>
+        </CardTitle>
       </CardHeader>
       <Separator />
-      <CardContent className=" overflow-y-auto grid gap-2 bg-secondary">
+      <CardContent className="grid gap-2 bg-secondary rounded-b-lg">
         {items.length === 0 ? (
           <div className="text-base text-gray-400 py-2">
             No tasks to display

@@ -207,15 +207,15 @@ const TaskForm = ({
             </FormItem>
           )}
         />
-        <div className="space-x-4 text-right">
-          <Button type="submit">
-            {actionType === "create" ? "Add Task" : "Update Task"}
-          </Button>
+        <div className="space-x-4 text-left">
           {actionType === "update" ? (
             <Button variant="destructive" onClick={onDelete}>
               Delete
             </Button>
           ) : null}
+          <Button type="submit">
+            {actionType === "create" ? "Add Task" : "Update Task"}
+          </Button>
         </div>
       </form>
     </Form>
