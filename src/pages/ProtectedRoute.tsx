@@ -1,14 +1,15 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-
-import { useAppSelector } from "@/store/hooks";
+import { useAuthContext } from "@/context/AuthContext";
 
 type Props = {
   children: ReactNode;
 };
 
 const ProtectedRoute: React.FC<Props> = ({ children }) => {
-  const user = useAppSelector((state) => state.auth.user);
+  const { user, loading } = useAuthContext();
+
+  if (loading) return <div>Loading...</div>;
 
   if (!user) return <Navigate to="/signin" replace />;
 

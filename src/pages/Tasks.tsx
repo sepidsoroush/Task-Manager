@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import TasksColumns from "../components/tasks/TasksCols";
 
@@ -12,7 +11,6 @@ import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
 const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state) => state.auth.user);
   const items = useAppSelector<Task[]>((state) => state.tasks.items);
   const isLoading = useAppSelector<boolean>((state) => state.ui.loading);
   const todoItems: Task[] | null = items.filter(
@@ -28,8 +26,6 @@ const Tasks: React.FC = () => {
   useEffect(() => {
     dispatch(setDataAction());
   }, [dispatch]);
-
-  if (!user) return <Navigate to="/login" />;
 
   return (
     <>
