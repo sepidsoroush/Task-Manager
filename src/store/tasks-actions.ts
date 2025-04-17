@@ -3,112 +3,123 @@ import { Dispatch } from "redux";
 import { tasksActions } from "./features/tasks-slice";
 import { uiActions } from "./features/ui-slice";
 import Task from "../models/tasks";
+import { getAuth } from "firebase/auth";
 
 const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
 export function setDataAction() {
-  return (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
-    axios
-      .get(`${databaseURL}.json`)
-      .then((response) => {
-        const dataObj = response.data;
-        const loadedData = [];
+
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const response = await axios.get(
+        `${databaseURL}/users/${userId}/tasks.json`
+      );
+      const dataObj = response.data;
+      const loadedData: Task[] = [];
+
+      if (dataObj) {
         for (const key in dataObj) {
+          const task = dataObj[key].task;
           loadedData.push({
-            id: dataObj[key].id,
-            title: dataObj[key].title,
-            description: dataObj[key].description,
-            date: dataObj[key].date,
-            status: dataObj[key].status,
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            date: task.date,
+            status: task.status,
           });
         }
-        dispatch(tasksActions.setItems({ tasks: loadedData }));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(uiActions.setLoading(false));
-      });
+      }
+
+      dispatch(tasksActions.setItems({ tasks: loadedData }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(uiActions.setLoading(false));
+    }
   };
 }
 
 export function deleteAction(taskID: string) {
-  return (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
 
-    axios
-      .get(`${databaseURL}.json`)
-      .then((response) => {
-        const dataObj = response.data;
-        const key = Object.keys(dataObj).find(
-          (key) => dataObj[key].id === taskID
-        );
-        if (key) {
-          axios
-            .delete(`${databaseURL}/${key}.json`)
-            .then(() => {
-              dispatch(tasksActions.deleteItem(taskID));
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          console.log("Task not found in database.");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(uiActions.setLoading(false));
-      });
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const response = await axios.get(
+        `${databaseURL}/users/${userId}/tasks.json`
+      );
+      const dataObj = response.data;
+
+      const key = Object.keys(dataObj).find(
+        (key) => dataObj[key].task.id === taskID
+      );
+
+      if (key) {
+        await axios.delete(`${databaseURL}/users/${userId}/tasks/${key}.json`);
+        dispatch(tasksActions.deleteItem(taskID));
+      } else {
+        console.log("Task not found in database.");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(uiActions.setLoading(false));
+    }
   };
 }
 
 export function addAction(task: Task) {
-  return (dispatch: Dispatch) => {
-    axios
-      .post(`${databaseURL}.json`, task)
-      .then(() => {
-        dispatch(tasksActions.addItem(task));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  return async (dispatch: Dispatch) => {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const response = await axios.post(
+        `${databaseURL}/users/${userId}/tasks.json`,
+        { task }
+      );
+      dispatch(tasksActions.addItem(task));
+    } catch (error) {
+      console.log(error);
+    }
   };
 }
 
 export function updateAction(id: string, task: Task) {
-  return (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
 
-    axios
-      .get(`${databaseURL}.json`)
-      .then((response) => {
-        const dataObj = response.data;
-        const key = Object.keys(dataObj).find(
-          (dataKey) => dataObj[dataKey].id === id
-        );
-        if (key) {
-          axios
-            .put(`${databaseURL}/${key}.json`, task)
-            .then(() => {
-              dispatch(tasksActions.updateItem({ id, task }));
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          console.log("Task not found in database.");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        dispatch(uiActions.setLoading(false));
-      });
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) return;
+
+    try {
+      const response = await axios.get(
+        `${databaseURL}/users/${userId}/tasks.json`
+      );
+      const dataObj = response.data;
+
+      const key = Object.keys(dataObj).find(
+        (key) => dataObj[key].task.id === id
+      );
+
+      if (key) {
+        await axios.put(`${databaseURL}/users/${userId}/tasks/${key}.json`, {
+          task,
+        });
+        dispatch(tasksActions.updateItem({ id, task }));
+      } else {
+        console.log("Task not found in database.");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(uiActions.setLoading(false));
+    }
   };
 }
