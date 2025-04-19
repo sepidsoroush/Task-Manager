@@ -10,27 +10,18 @@ const databaseURL = import.meta.env.VITE_DATABASE_URL;
 export function setDataAction() {
   return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
-
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
     try {
-      const response = await axios.get(
-        `${databaseURL}/users/${userId}/tasks.json`
-      );
+      const response = await axios.get(`${databaseURL}/users/${userId}.json`);
       const dataObj = response.data;
       const loadedData: Task[] = [];
 
       if (dataObj) {
         for (const key in dataObj) {
-          const task = dataObj[key].task;
-          loadedData.push({
-            id: task.id,
-            title: task.title,
-            description: task.description,
-            date: task.date,
-            status: task.status,
-          });
+          const task = dataObj[key];
+          loadedData.push(task);
         }
       }
 
@@ -46,26 +37,12 @@ export function setDataAction() {
 export function deleteAction(taskID: string) {
   return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
-
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
     try {
-      const response = await axios.get(
-        `${databaseURL}/users/${userId}/tasks.json`
-      );
-      const dataObj = response.data;
-
-      const key = Object.keys(dataObj).find(
-        (key) => dataObj[key].task.id === taskID
-      );
-
-      if (key) {
-        await axios.delete(`${databaseURL}/users/${userId}/tasks/${key}.json`);
-        dispatch(tasksActions.deleteItem(taskID));
-      } else {
-        console.log("Task not found in database.");
-      }
+      await axios.delete(`${databaseURL}/users/${userId}/${taskID}.json`);
+      dispatch(tasksActions.deleteItem(taskID));
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,10 +57,7 @@ export function addAction(task: Task) {
     if (!userId) return;
 
     try {
-      const response = await axios.post(
-        `${databaseURL}/users/${userId}/tasks.json`,
-        { task }
-      );
+      await axios.put(`${databaseURL}/users/${userId}/${task.id}.json`, task);
       dispatch(tasksActions.addItem(task));
     } catch (error) {
       console.log(error);
@@ -94,28 +68,12 @@ export function addAction(task: Task) {
 export function updateAction(id: string, task: Task) {
   return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
-
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
     try {
-      const response = await axios.get(
-        `${databaseURL}/users/${userId}/tasks.json`
-      );
-      const dataObj = response.data;
-
-      const key = Object.keys(dataObj).find(
-        (key) => dataObj[key].task.id === id
-      );
-
-      if (key) {
-        await axios.put(`${databaseURL}/users/${userId}/tasks/${key}.json`, {
-          task,
-        });
-        dispatch(tasksActions.updateItem({ id, task }));
-      } else {
-        console.log("Task not found in database.");
-      }
+      await axios.put(`${databaseURL}/users/${userId}/${id}.json`, task);
+      dispatch(tasksActions.updateItem({ id, task }));
     } catch (error) {
       console.log(error);
     } finally {
