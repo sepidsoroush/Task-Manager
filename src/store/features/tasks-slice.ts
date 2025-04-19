@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Task from "../../models/tasks";
+import { Task } from "../../models";
 
 // Define a type for the slice state
 interface tasksState {

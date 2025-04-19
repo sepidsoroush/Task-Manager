@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 
 import TaskItem from "./TaskItem";
-import Task from "@/models/tasks";
+import { Task } from "@/models";
 import { IconType } from "react-icons";
 
 type Props = {

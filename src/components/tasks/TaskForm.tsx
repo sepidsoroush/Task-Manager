@@ -35,7 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import Task from "@/models/tasks";
+import { Task } from "@/models";
 import { useAppDispatch } from "@/store/hooks";
 import { addAction, updateAction, deleteAction } from "@/store/tasks-actions";
 

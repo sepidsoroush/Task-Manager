@@ -4,7 +4,7 @@ import TasksColumns from "../components/tasks/TasksCols";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setDataAction } from "@/store/tasks-actions";
-import Task from "@/models/tasks";
+import { Task } from "@/models";
 
 import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
 

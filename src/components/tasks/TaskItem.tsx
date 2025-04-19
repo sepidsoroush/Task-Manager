@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 
 import TaskForm from "./TaskForm";
-import Task from "@/models/tasks";
+import { Task } from "@/models";
 import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
