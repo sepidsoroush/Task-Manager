@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
@@ -12,10 +12,12 @@ import TaskForm from "./TaskForm";
 import Task from "@/models/tasks";
 import { format } from "date-fns";
 
+import { cn } from "@/lib/utils";
+
 type Props = {
   task: Task;
 };
-
+const today = new Date();
 const TaskItem = ({ task }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -25,9 +27,18 @@ const TaskItem = ({ task }: Props) => {
         <Card className="text-left">
           <CardTitle className="text-base p-2 md:p-4 flex flex-col">
             <span>{task.title}</span>
-            <span className="text-xs font-light text-gray-500">
-              {task.date ? format(task.date, "PPP") : null}
-            </span>
+            {task.date && (
+              <span
+                className={cn(
+                  new Date(task.date) < today
+                    ? "text-red-500"
+                    : "text-neutral-500",
+                  "text-xs font-light"
+                )}
+              >
+                {format(task.date, "PPP")}
+              </span>
+            )}
           </CardTitle>
           <CardContent className="text-xs">{task.description}</CardContent>
         </Card>
