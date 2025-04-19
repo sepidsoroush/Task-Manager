@@ -1,4 +1,4 @@
-# Task-Manager
+# Chore
 
 A task manager made by Reactjs, Redux and TypeScript.
 
@@ -12,7 +12,7 @@ A task manager made by Reactjs, Redux and TypeScript.
 - [x] Set Status for tasks (To Do, Doing, Done)
 - [x] Responsive design
 - [x] light/ dark theme
-- [ ] Authentication for login/ logout
+- [x] Authentication for login/ logout
 - [ ] Handle multiple Boards (lists)
 - [ ] Drag and Drop tasks in the Task columns
 - [ ] Calendar view
