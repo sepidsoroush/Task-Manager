@@ -37,6 +37,8 @@ const Tasks: React.FC = () => {
     dispatch(updateActiveBoard(value));
   };
 
+  const activeBoard = boards.find((b) => b.id === activeBoardId);
+
   return (
     <>
       {isLoading ? (
@@ -66,16 +68,19 @@ const Tasks: React.FC = () => {
                   title="To Do"
                   items={board.tasks.filter((item) => item.status === "To Do")}
                   Icon={IconPlayerPause}
+                  board={board}
                 />
                 <TasksColumns
                   title="Doing"
                   items={board.tasks.filter((item) => item.status === "Doing")}
                   Icon={IconRun}
+                  board={board}
                 />
                 <TasksColumns
                   title="Done"
                   items={board.tasks.filter((item) => item.status === "Done")}
                   Icon={IconCircleCheck}
+                  board={board}
                 />
               </div>
             </TabsContent>

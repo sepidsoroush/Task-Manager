@@ -9,23 +9,27 @@ import {
 } from "@/components/ui/dialog";
 
 import TaskForm from "./TaskForm";
-import { Task } from "@/models";
+import { Task, Board } from "@/models";
 import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
 
 type Props = {
   task: Task;
+  board: Board;
 };
 const today = new Date();
-const TaskItem = ({ task }: Props) => {
+const TaskItem = ({ task, board }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Card className="text-left">
-          <CardTitle className="text-base p-2 md:p-4 flex flex-col">
+        <Card className="text-left hover:shadow-md transition-shadow">
+          <CardTitle 
+            className="text-base p-2 md:p-4 flex flex-col"
+            style={{ borderLeft: `4px solid ${board.color}` }}
+          >
             <span>{task.title}</span>
             {task.date && (
               <span
@@ -36,7 +40,7 @@ const TaskItem = ({ task }: Props) => {
                   "text-xs font-light"
                 )}
               >
-                {format(task.date, "PPP")}
+                {format(new Date(task.date), "MMM d, yyyy")}
               </span>
             )}
           </CardTitle>
@@ -45,13 +49,9 @@ const TaskItem = ({ task }: Props) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Task's info</DialogTitle>
+          <DialogTitle>Edit task</DialogTitle>
         </DialogHeader>
-        <TaskForm
-          actionType="update"
-          taskToUpdate={task}
-          onOpenChange={setOpen}
-        />
+        <TaskForm actionType="update" taskToUpdate={task} onOpenChange={setOpen} />
       </DialogContent>
     </Dialog>
   );
