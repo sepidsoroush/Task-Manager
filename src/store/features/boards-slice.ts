@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Board, Task } from "../../models";
+import { COLORS } from "@/lib/utils";
 
 interface BoardsState {
   items: Board[];
@@ -12,21 +13,13 @@ if (!storedActive) {
   localStorage.setItem("activeBoardId", initialActive);
 }
 
+export const initialBoards: Board[] = [
+  { id: "personal", title: "Personal", color: COLORS.cyan[100], tasks: [] },
+  { id: "work", title: "Work", color: COLORS.amber[100], tasks: [] },
+];
+
 const initialState: BoardsState = {
-  items: [
-    {
-      id: "personal",
-      title: "Personal",
-      color: "oklch(78.9% 0.154 211.53)",
-      tasks: [],
-    },
-    {
-      id: "work",
-      title: "Work",
-      color: "oklch(89.7% 0.196 126.665)",
-      tasks: [],
-    },
-  ],
+  items: initialBoards,
   activeBoardId: initialActive,
 };
 

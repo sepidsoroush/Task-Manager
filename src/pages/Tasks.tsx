@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import TasksColumns from "../components/tasks/TasksCols";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,9 +10,11 @@ import {
 } from "@/store/boards-actions";
 
 import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
+import NewBoard from "@/components/boards/NewBoard";
 
 const Tasks: React.FC = () => {
   const dispatch = useAppDispatch();
+  const [selectedTab, setSelectedTab] = useState<string>("");
 
   const boards = useAppSelector((state) => state.boards.items);
   const activeBoardId = useAppSelector((state) => state.boards.activeBoardId);
@@ -22,8 +24,17 @@ const Tasks: React.FC = () => {
     dispatch(fetchBoardsWithTasks());
   }, [dispatch]);
 
-  const changeBoard = (boardId: string) => {
-    dispatch(updateActiveBoard(boardId));
+  useEffect(() => {
+    setSelectedTab(activeBoardId);
+  }, [activeBoardId]);
+
+  const handleTabChange = (value: string) => {
+    if (value === "new") {
+      setSelectedTab(activeBoardId);
+      return;
+    }
+    setSelectedTab(value);
+    dispatch(updateActiveBoard(value));
   };
 
   return (
@@ -37,19 +48,16 @@ const Tasks: React.FC = () => {
           />
         </div>
       ) : (
-        <Tabs
-          defaultValue={activeBoardId}
-          className="w-full"
-          onValueChange={(value) => {
-            changeBoard(value);
-          }}
-        >
+        <Tabs value={selectedTab} onValueChange={handleTabChange}>
           <TabsList>
             {boards.map((board) => (
               <TabsTrigger key={board.id} value={board.id}>
                 {board.title}
               </TabsTrigger>
             ))}
+            <TabsTrigger key="new" value="new" className="w-12">
+              <NewBoard />
+            </TabsTrigger>
           </TabsList>
           {boards.map((board) => (
             <TabsContent key={board.id} value={board.id}>
