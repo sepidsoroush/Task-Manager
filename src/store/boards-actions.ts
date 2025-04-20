@@ -1,18 +1,30 @@
 import axios from "axios";
-import { Dispatch } from "redux";
+import { Dispatch, Action } from "redux";
 import { getAuth } from "firebase/auth";
 import { Board, Task } from "../models";
 import { boardsActions } from "./features/boards-slice";
 import { uiActions } from "./features/ui-slice";
+import { RootState } from "./index";
+import { ThunkAction } from "redux-thunk";
 
 const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
+type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
+
 // Fetch all boards and their tasks
-export function fetchBoardsWithTasks() {
+export function fetchBoardsWithTasks(): AppThunk {
   return async (dispatch: Dispatch) => {
     dispatch(uiActions.setLoading(true));
     const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
+    if (!userId) {
+      dispatch(uiActions.setLoading(false));
+      return;
+    }
 
     try {
       const res = await axios.get(`${databaseURL}/users/${userId}.json`);
@@ -37,7 +49,10 @@ export function fetchBoardsWithTasks() {
         }
       }
 
-      dispatch(boardsActions.setBoards(loadedBoards));
+      // Only update boards if we actually loaded some from the database
+      if (loadedBoards.length > 0) {
+        dispatch(boardsActions.setBoards(loadedBoards));
+      }
 
       // Set active board from localStorage if available
       const activeBoardId = localStorage.getItem("activeBoardId");
@@ -53,7 +68,7 @@ export function fetchBoardsWithTasks() {
 }
 
 // Add a board (with no tasks initially)
-export function addBoard(board: Board) {
+export function addBoard(board: Board): AppThunk {
   return async (dispatch: Dispatch) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
@@ -75,8 +90,8 @@ export function addBoard(board: Board) {
 }
 
 // Delete board
-export function deleteBoard(boardId: string) {
-  return async (dispatch: Dispatch, getState: any) => {
+export function deleteBoard(boardId: string): AppThunk {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
@@ -100,8 +115,8 @@ export function deleteBoard(boardId: string) {
 }
 
 // Update board meta (title or color)
-export function updateBoard(id: string, updated: Partial<Board>) {
-  return async (dispatch: Dispatch, getState: any) => {
+export function updateBoard(id: string, updated: Partial<Board>): AppThunk {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     const board = getState().boards.items.find((b: Board) => b.id === id);
     if (!board) return;
 
@@ -116,7 +131,7 @@ export function updateBoard(id: string, updated: Partial<Board>) {
 }
 
 // Add task to a board
-export function addTask(boardId: string, task: Task) {
+export function addTask(boardId: string, task: Task): AppThunk {
   return async (dispatch: Dispatch) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
@@ -134,7 +149,7 @@ export function addTask(boardId: string, task: Task) {
 }
 
 // Update task in a board
-export function updateTask(boardId: string, task: Task) {
+export function updateTask(boardId: string, task: Task): AppThunk {
   return async (dispatch: Dispatch) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
@@ -152,7 +167,7 @@ export function updateTask(boardId: string, task: Task) {
 }
 
 // Delete task from a board
-export function deleteTask(boardId: string, taskId: string) {
+export function deleteTask(boardId: string, taskId: string): AppThunk {
   return async (dispatch: Dispatch) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
@@ -165,5 +180,12 @@ export function deleteTask(boardId: string, taskId: string) {
     } catch (err) {
       console.error(err);
     }
+  };
+}
+
+export function updateActiveBoard(boardId: string): AppThunk {
+  return (dispatch: Dispatch) => {
+    dispatch(boardsActions.setActiveBoard(boardId));
+    localStorage.setItem("activeBoardId", boardId);
   };
 }

@@ -3,7 +3,13 @@ import { Board, Task } from "../../models";
 
 interface BoardsState {
   items: Board[];
-  activeBoardId: string | null;
+  activeBoardId: string;
+}
+
+const storedActive = localStorage.getItem("activeBoardId");
+const initialActive = storedActive || "personal";
+if (!storedActive) {
+  localStorage.setItem("activeBoardId", initialActive);
 }
 
 const initialState: BoardsState = {
@@ -21,7 +27,7 @@ const initialState: BoardsState = {
       tasks: [],
     },
   ],
-  activeBoardId: localStorage.getItem("activeBoardId") || "personal", // Default to "personal"
+  activeBoardId: initialActive,
 };
 
 const boardsSlice = createSlice({
@@ -43,11 +49,15 @@ const boardsSlice = createSlice({
       if (state.items.length <= 1) return; // always keep at least one
       state.items = state.items.filter((b) => b.id !== action.payload);
       if (state.activeBoardId === action.payload) {
-        state.activeBoardId = state.items[0]?.id || null;
+        state.activeBoardId = state.items[0]?.id;
       }
     },
     setActiveBoard(state, action: PayloadAction<string>) {
-      state.activeBoardId = action.payload;
+      const exists = state.items.some((b) => b.id === action.payload);
+      if (exists) {
+        state.activeBoardId = action.payload;
+        localStorage.setItem("activeBoardId", action.payload);
+      }
     },
 
     // Tasks inside a board

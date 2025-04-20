@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, SetStateAction } from "react";
-
+import { useAppSelector } from "@/store/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { format } from "date-fns";
@@ -37,7 +37,7 @@ import {
 
 import { Task } from "@/models";
 import { useAppDispatch } from "@/store/hooks";
-import { addAction, updateAction, deleteAction } from "@/store/tasks-actions";
+import { addTask, updateTask, deleteTask } from "@/store/boards-actions";
 
 import { IconCalendar } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -75,6 +75,7 @@ const TaskForm = ({
   onOpenChange,
 }: TaskFormProps) => {
   const dispatch = useAppDispatch();
+  const activeBoardId = useAppSelector((state) => state.boards.activeBoardId);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -96,9 +97,9 @@ const TaskForm = ({
     };
 
     if (actionType === "create") {
-      dispatch(addAction(task));
+      dispatch(addTask(activeBoardId, task));
     } else if (actionType === "update") {
-      dispatch(updateAction(task.id, task));
+      dispatch(updateTask(task.id, task));
     }
 
     form.reset();
@@ -107,7 +108,7 @@ const TaskForm = ({
 
   const onDelete = () => {
     if (taskToUpdate) {
-      dispatch(deleteAction(taskToUpdate.id));
+      dispatch(deleteTask(activeBoardId, taskToUpdate.id));
     }
   };
 
