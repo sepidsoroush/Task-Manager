@@ -7,8 +7,21 @@ interface BoardsState {
 }
 
 const initialState: BoardsState = {
-  items: [],
-  activeBoardId: null,
+  items: [
+    {
+      id: "personal",
+      title: "Personal",
+      color: "oklch(78.9% 0.154 211.53)",
+      tasks: [],
+    },
+    {
+      id: "work",
+      title: "Work",
+      color: "oklch(89.7% 0.196 126.665)",
+      tasks: [],
+    },
+  ],
+  activeBoardId: localStorage.getItem("activeBoardId") || "personal", // Default to "personal"
 };
 
 const boardsSlice = createSlice({
