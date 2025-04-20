@@ -57,9 +57,9 @@ const Tasks: React.FC = () => {
                 {board.title}
               </TabsTrigger>
             ))}
-            <TabsTrigger key="new" value="new" className="w-12">
+            <div className="w-12 flex items-center justify-center">
               <NewBoard />
-            </TabsTrigger>
+            </div>
           </TabsList>
           {boards.map((board) => (
             <TabsContent key={board.id} value={board.id}>

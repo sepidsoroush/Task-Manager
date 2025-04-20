@@ -5,6 +5,7 @@ import {
   DialogTrigger,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { IconPlus } from "@tabler/icons-react";
 import BoardForm from "./BoardForm";
@@ -20,6 +21,9 @@ const NewBoard: React.FC = () => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add new board</DialogTitle>
+          <DialogDescription className="hidden">
+            Add a new board
+          </DialogDescription>
         </DialogHeader>
         <BoardForm onOpenChange={setOpen} />
       </DialogContent>
