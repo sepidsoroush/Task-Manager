@@ -14,8 +14,8 @@ if (!storedActive) {
 }
 
 export const initialBoards: Board[] = [
-  { id: "personal", title: "Personal", color: COLORS.cyan[100], tasks: [] },
-  { id: "work", title: "Work", color: COLORS.amber[100], tasks: [] },
+  { id: "personal", title: "Personal", color: COLORS.cyan, tasks: [] },
+  { id: "work", title: "Work", color: COLORS.amber, tasks: [] },
 ];
 
 const initialState: BoardsState = {

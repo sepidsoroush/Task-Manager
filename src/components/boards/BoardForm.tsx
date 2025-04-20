@@ -42,7 +42,7 @@ const BoardForm = ({ onOpenChange }: BoardFormProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      color: COLORS.red[100],
+      color: COLORS.red,
     },
   });
 
@@ -80,26 +80,22 @@ const BoardForm = ({ onOpenChange }: BoardFormProps) => {
           name="color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Color</FormLabel>
+              <FormLabel>Theme</FormLabel>
               <FormControl>
-                <div className="grid grid-cols-11 gap-1.5 sm:gap-4">
-                  {Object.entries(COLORS).map(([colorName, shades]) => (
-                    <div key={colorName} className="space-y-1.5">
-                      {Object.entries(shades).map(([shade, value]) => (
-                        <button
-                          key={`${colorName}-${shade}`}
-                          type="button"
-                          onClick={() => field.onChange(value)}
-                          className={cn(
-                            "w-full h-6 rounded-md border border-border transition-all hover:scale-110",
-                            field.value === value &&
-                              "ring-2 ring-ring ring-offset-2"
-                          )}
-                          style={{ backgroundColor: value }}
-                          title={`${colorName}-${shade}`}
-                        />
-                      ))}
-                    </div>
+                <div className="grid grid-cols-6 sm:grid-cols-11 gap-2">
+                  {Object.entries(COLORS).map(([colorName, value]) => (
+                    <button
+                      key={colorName}
+                      type="button"
+                      onClick={() => field.onChange(value)}
+                      className={cn(
+                        "w-full aspect-square rounded-md border border-border transition-all hover:scale-110",
+                        field.value === value &&
+                          "ring-2 ring-ring ring-offset-2"
+                      )}
+                      style={{ backgroundColor: value }}
+                      title={colorName}
+                    />
                   ))}
                 </div>
               </FormControl>
