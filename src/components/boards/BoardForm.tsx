@@ -1,10 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { nanoid } from "nanoid";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -13,51 +11,80 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
+import { cn } from "@/lib/utils";
+import { COLORS } from "@/lib/utils";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addBoard, updateBoard } from "@/store/boards-actions";
 import { Board } from "@/models";
-import { useAppDispatch } from "@/store/hooks";
-import { addBoard } from "@/store/boards-actions";
-import { cn, COLORS } from "@/lib/utils";
-
-interface BoardFormProps {
-  onOpenChange?: Dispatch<SetStateAction<boolean>>;
-}
 
 const formSchema = z.object({
   title: z
     .string()
-    .min(2, {
-      message: "Title must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Title must not be longer than 30 characters.",
-    }),
+    .min(1, "Title is required")
+    .max(50, "Title must be less than 50 characters"),
   color: z.string(),
 });
 
-const BoardForm = ({ onOpenChange }: BoardFormProps) => {
+type Props = {
+  onOpenChange: (open: boolean) => void;
+  actionType?: "create" | "update";
+};
+
+const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
   const dispatch = useAppDispatch();
+  const activeBoardId = useAppSelector((state) => state.boards.activeBoardId);
+  const boards = useAppSelector((state) => state.boards.items);
+  const activeBoard = useAppSelector((state) =>
+    state.boards.items.find((b) => b.id === activeBoardId)
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      color: COLORS.red,
+      title: actionType === "update" ? activeBoard?.title : "",
+      color: actionType === "update" ? activeBoard?.color : COLORS.red,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const board: Board = {
-      id: values.title.toLowerCase().replace(/\s+/g, "-"),
-      title: values.title,
-      color: values.color,
-      tasks: [],
-    };
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Check for duplicate title
+    const isDuplicate = boards.some((board) => {
+      // For updates, exclude the current board from duplicate check
+      if (actionType === "update" && board.id === activeBoardId) {
+        return false;
+      }
+      return board.title.toLowerCase() === values.title.toLowerCase();
+    });
 
-    dispatch(addBoard(board));
+    if (isDuplicate) {
+      form.setError("title", {
+        type: "manual",
+        message: "A board with this title already exists",
+      });
+      return;
+    }
+
+    if (actionType === "create") {
+      const board: Board = {
+        id: nanoid(),
+        title: values.title,
+        color: values.color,
+        tasks: [],
+      };
+      dispatch(addBoard(board));
+    } else {
+      dispatch(updateBoard(activeBoardId, {
+        title: values.title,
+        color: values.color,
+      }));
+    }
+
     form.reset();
-    onOpenChange?.(false);
-  }
+    onOpenChange(false);
+  };
 
   return (
     <Form {...form}>
@@ -90,8 +117,7 @@ const BoardForm = ({ onOpenChange }: BoardFormProps) => {
                       onClick={() => field.onChange(value)}
                       className={cn(
                         "w-full aspect-square rounded-md border border-border transition-all hover:scale-110",
-                        field.value === value &&
-                          "ring-2 ring-ring ring-offset-2"
+                        field.value === value && "ring-2 ring-ring ring-offset-2"
                       )}
                       style={{ backgroundColor: value }}
                       title={colorName}
@@ -104,7 +130,9 @@ const BoardForm = ({ onOpenChange }: BoardFormProps) => {
           )}
         />
         <div className="flex justify-end">
-          <Button type="submit">Add Board</Button>
+          <Button type="submit">
+            {actionType === "create" ? "Add Board" : "Update Board"}
+          </Button>
         </div>
       </form>
     </Form>

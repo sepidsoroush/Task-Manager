@@ -27,7 +27,7 @@ const Logout: React.FC = () => {
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button variant="ghost" size="icon">
           <IconLogout className="h-[1.2rem] w-[1.2rem]" />
         </Button>

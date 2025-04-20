@@ -28,7 +28,7 @@ const NewBoard: React.FC = () => {
             Add a new board
           </DialogDescription>
         </DialogHeader>
-        <BoardForm onOpenChange={setOpen} />
+        <BoardForm onOpenChange={setOpen} actionType="create" />
       </DialogContent>
     </Dialog>
   );

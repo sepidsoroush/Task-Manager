@@ -1,8 +1,9 @@
 import { Logo } from "@/components/shared/Logo";
 
 import NewTask from "@/components/tasks/NewTask";
-import { ModeToggle } from "../theme/ModeToggleMenu";
 import Logout from "@/components/auth/Logout";
+import EditBoard from "@/components/boards/EditBoard";
+import { ModeToggle } from "@/components/layout/theme/ModeToggleMenu";
 
 const Header = () => {
   return (
@@ -14,6 +15,7 @@ const Header = () => {
         </div>
         <div className="flex flex-row justify-start items-end gap-1 md:gap-2">
           <NewTask />
+          <EditBoard />
           <ModeToggle />
           <Logout />
         </div>
