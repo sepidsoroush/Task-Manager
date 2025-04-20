@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,13 +14,11 @@ const NewTask: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button className="gap-1">
-          <IconPlus size={18} />
-          <span className="hidden md:inline text-base font-light">
-            Add new task
-          </span>
-        </Button>
+      <DialogTrigger className="flex flex-row gap-1 items-center">
+        <IconPlus size={18} />
+        <span className="hidden md:inline text-base font-light">
+          Add new task
+        </span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
