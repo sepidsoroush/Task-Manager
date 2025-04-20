@@ -97,7 +97,7 @@ const TaskForm = ({
     if (actionType === "create") {
       dispatch(addTask(activeBoardId, task));
     } else if (actionType === "update") {
-      dispatch(updateTask(task.id, task));
+      dispatch(updateTask(activeBoardId, task));
     }
 
     form.reset();
