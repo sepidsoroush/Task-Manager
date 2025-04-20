@@ -10,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { IconLogout } from "@tabler/icons-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +28,9 @@ const Logout: React.FC = () => {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger>
-        <IconLogout />
+        <Button variant="ghost" size="icon">
+          <IconLogout className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>

@@ -10,6 +10,7 @@ import {
 import TaskForm from "@/components/tasks/TaskForm";
 import { IconPlus } from "@tabler/icons-react";
 import { useAppSelector } from "@/store/hooks";
+import { Button } from "@/components/ui/button";
 
 const NewTask: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -17,11 +18,13 @@ const NewTask: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex flex-row gap-1 items-center">
-        <IconPlus size={18} />
-        <span className="hidden md:inline text-base font-light">
-          Add new task
-        </span>
+      <DialogTrigger asChild>
+        <Button variant="default" className="gap-1">
+          <IconPlus size={18} />
+          <span className="hidden md:inline text-base font-light">
+            Add new task
+          </span>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

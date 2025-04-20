@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import BoardForm from "./BoardForm";
 
@@ -15,8 +16,10 @@ const NewBoard: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="flex flex-row gap-1 items-center">
-        <IconPlus size={18} />
+      <DialogTrigger asChild>
+        <Button variant="secondary" size="icon">
+          <IconPlus size={18} />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
