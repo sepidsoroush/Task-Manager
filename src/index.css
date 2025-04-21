@@ -49,6 +49,16 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-hidden {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+}
+
 @layer base {
   * {
     @apply border-border;
