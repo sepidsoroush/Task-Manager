@@ -75,10 +75,12 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
       };
       dispatch(addBoard(board));
     } else {
-      dispatch(updateBoard(activeBoardId, {
-        title: values.title,
-        color: values.color,
-      }));
+      dispatch(
+        updateBoard(activeBoardId, {
+          title: values.title,
+          color: values.color,
+        })
+      );
     }
 
     form.reset();
@@ -108,15 +110,16 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
             <FormItem>
               <FormLabel>Theme</FormLabel>
               <FormControl>
-                <div className="grid grid-cols-6 sm:grid-cols-11 gap-2">
+                <div className="grid grid-cols-10 gap-2">
                   {Object.entries(COLORS).map(([colorName, value]) => (
                     <button
                       key={colorName}
                       type="button"
                       onClick={() => field.onChange(value)}
                       className={cn(
-                        "w-full aspect-square rounded-md border border-border transition-all hover:scale-110",
-                        field.value === value && "ring-2 ring-ring ring-offset-2"
+                        "w-full aspect-square rounded-md border border-border transition-all hover:scale-110 rounded-full",
+                        field.value === value &&
+                          "ring-2 ring-ring ring-offset-2"
                       )}
                       style={{ backgroundColor: value }}
                       title={colorName}

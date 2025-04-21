@@ -25,8 +25,6 @@ export const COLORS = {
   pink: "oklch(75.3% 0.172 331.38)",
   rose: "oklch(73.3% 0.174 28.608)",
   slate: "oklch(69.4% 0.027 257.417)",
-  gray: "oklch(70.4% 0.027 252.788)",
-  zinc: "oklch(70.4% 0.026 264.788)",
   neutral: "oklch(70.4% 0.04 256.788)",
   stone: "oklch(70.2% 0.021 41.788)",
 };
