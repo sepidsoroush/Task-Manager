@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
 
 import TasksColumns from "@/components/tasks/TasksCols";
-import NewTask from "@/components/tasks/NewTask";
+
 import NewBoard from "@/components/boards/NewBoard";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   fetchBoardsWithTasks,
   updateActiveBoard,
+  updateTask,
 } from "@/store/boards-actions";
+
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 
 const Tasks = () => {
   const dispatch = useAppDispatch();
@@ -32,8 +35,23 @@ const Tasks = () => {
     setSelectedTab(activeBoardId);
   }, [activeBoardId]);
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const task = active.data.current?.task;
+
+    // Directly set status from the column name
+    const newStatus = over.id; // Assuming over.id is just "To Do", "Doing", or "Done"
+
+    if (task.status !== newStatus) {
+      dispatch(updateTask(activeBoardId, { ...task, status: newStatus }));
+    }
+  };
+
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
       {loading ? (
         <div className="h-96 flex items-center justify-center">
           <LoadingSpinner
@@ -107,7 +125,7 @@ const Tasks = () => {
           ))}
         </Tabs>
       )}
-    </>
+    </DndContext>
   );
 };
 

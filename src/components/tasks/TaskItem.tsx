@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -8,31 +8,59 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { IconGripVertical } from "@tabler/icons-react"; // or your preferred icon
 import TaskForm from "./TaskForm";
 import { Task, Board } from "@/models";
 import { format } from "date-fns";
-
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   task: Task;
   board: Board;
+  dragRef?: (node: HTMLElement | null) => void;
+  dragAttributes?: any;
+  dragListeners?: any;
 };
+
 const today = new Date();
-const TaskItem = ({ task, board }: Props) => {
+
+const TaskItem = ({
+  task,
+  board,
+  dragRef,
+  dragAttributes,
+  dragListeners,
+}: Props) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Card className="text-left hover:shadow-md transition-shadow">
-          <CardTitle 
-            className="text-base p-2 md:p-4 flex flex-col"
-            style={{ borderLeft: `4px solid ${board.color}` }}
-          >
-            <span>{task.title}</span>
+      <DialogTrigger asChild>
+        <Card className="text-left hover:shadow-md transition-shadow cursor-pointer">
+          <CardHeader className="flex flex-row items-center gap-2 p-2">
+            <div
+              ref={dragRef}
+              {...dragAttributes}
+              {...dragListeners}
+              className="cursor-grab active:cursor-grabbing"
+              onClick={(e) => e.stopPropagation()} // Prevent dialog open
+            >
+              <Button variant="secondary" size="icon">
+                <IconGripVertical size={18} />
+              </Button>
+            </div>
+            <CardTitle
+              className="text-base flex flex-row items-center gap-2"
+              style={{ borderLeft: `4px solid ${board.color}` }}
+            >
+              <span className="ml-1">{task.title}</span>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="text-xs p-2">
             {task.date && (
-              <span
+              <div
                 className={cn(
                   new Date(task.date) < today
                     ? "text-red-500"
@@ -41,17 +69,21 @@ const TaskItem = ({ task, board }: Props) => {
                 )}
               >
                 {format(new Date(task.date), "MMM d, yyyy")}
-              </span>
+              </div>
             )}
-          </CardTitle>
-          <CardContent className="text-xs">{task.description}</CardContent>
+            {task.description}
+          </CardContent>
         </Card>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit task</DialogTitle>
         </DialogHeader>
-        <TaskForm actionType="update" taskToUpdate={task} onOpenChange={setOpen} />
+        <TaskForm
+          actionType="update"
+          taskToUpdate={task}
+          onOpenChange={setOpen}
+        />
       </DialogContent>
     </Dialog>
   );
