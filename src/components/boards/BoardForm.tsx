@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { nanoid } from "nanoid";
 
 import {
   Form,
@@ -69,7 +68,7 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
 
     if (actionType === "create") {
       const board: Board = {
-        id: nanoid(),
+        id: new Date().getTime().toString(),
         title: values.title,
         color: values.color,
         tasks: [],

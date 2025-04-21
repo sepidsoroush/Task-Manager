@@ -7,15 +7,20 @@ interface BoardsState {
   activeBoardId: string;
 }
 
+// Create initial board IDs with timestamps
+const now = new Date().getTime();
+const personalBoardId = now.toString();
+const workBoardId = (now + 1).toString(); // Add 1ms to ensure unique ID
+
 const storedActive = localStorage.getItem("activeBoardId");
-const initialActive = storedActive || "personal";
+const initialActive = storedActive || personalBoardId;
 if (!storedActive) {
   localStorage.setItem("activeBoardId", initialActive);
 }
 
 export const initialBoards: Board[] = [
-  { id: "personal", title: "Personal", color: COLORS.cyan, tasks: [] },
-  { id: "work", title: "Work", color: COLORS.amber, tasks: [] },
+  { id: personalBoardId, title: "Personal", color: COLORS.cyan, tasks: [] },
+  { id: workBoardId, title: "Work", color: COLORS.amber, tasks: [] },
 ];
 
 const initialState: BoardsState = {
