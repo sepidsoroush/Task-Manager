@@ -16,8 +16,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { COLORS } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addBoard, updateBoard } from "@/store/boards-actions";
+import { addBoard, updateBoard, deleteBoard } from "@/store/boards-actions";
 import { Board } from "@/models";
+import { IconInfoCircle } from "@tabler/icons-react";
 
 const formSchema = z.object({
   title: z
@@ -87,6 +88,10 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
     onOpenChange(false);
   };
 
+  const onDelete = () => {
+    dispatch(deleteBoard(activeBoardId));
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -131,10 +136,26 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
             </FormItem>
           )}
         />
-        <div className="flex justify-end">
-          <Button type="submit">
-            {actionType === "create" ? "Add Board" : "Update Board"}
-          </Button>
+        <div className="flex flex-col flex-end gap-2 pt-4">
+          <div className="flex justify-start space-x-2">
+            <Button type="submit">
+              {actionType === "create" ? "Add Board" : "Update Board"}
+            </Button>
+            {actionType === "update" ? (
+              <Button variant="destructive" onClick={onDelete}>
+                Delete
+              </Button>
+            ) : null}
+          </div>
+          {actionType === "update" ? (
+            <div className="flex flex-row items-start gap-1 text-xs text-neutral-500">
+              <IconInfoCircle className="h-4 w-4" />
+              <span>
+                Deleting the board will also delete all tasks associated with
+                it.
+              </span>
+            </div>
+          ) : null}
         </div>
       </form>
     </Form>
