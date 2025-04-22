@@ -5,18 +5,19 @@ import { Task, Board } from "@/models";
 const DraggableTaskItem = ({ task, board }: { task: Task; board: Board }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id,
-    data: { task, boardId: board.id, fromStatus: task.status },
+    data: { task },
   });
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: transform
       ? `translate(${transform.x}px, ${transform.y}px)`
       : undefined,
-    zIndex: transform ? 50 : "auto",
+    zIndex: transform ? 50 : undefined,
+    touchAction: "none",
   };
 
   return (
-    <div style={style}>
+    <div ref={setNodeRef} style={style}>
       <TaskItem
         task={task}
         board={board}

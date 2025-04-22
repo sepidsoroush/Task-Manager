@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { IconGripVertical } from "@tabler/icons-react"; // or your preferred icon
+import { IconGripVertical } from "@tabler/icons-react";
 import TaskForm from "./TaskForm";
 import { Task, Board } from "@/models";
 import { format } from "date-fns";
@@ -37,28 +37,31 @@ const TaskItem = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Card className="text-left hover:shadow-md transition-shadow cursor-pointer">
+        <Card className="text-left hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center gap-2 p-2">
             <div
               ref={dragRef}
               {...dragAttributes}
               {...dragListeners}
-              className="cursor-grab active:cursor-grabbing"
-              onClick={(e) => e.stopPropagation()} // Prevent dialog open
+              onClick={(e) => e.stopPropagation()}
             >
-              <Button variant="secondary" size="icon">
+              <Button
+                variant="secondary"
+                size="icon"
+                className="cursor-grab active:cursor-grabbing select-none"
+              >
                 <IconGripVertical size={18} />
               </Button>
             </div>
             <CardTitle
-              className="text-base flex flex-row items-center gap-2"
+              className="text-base flex flex-row items-center gap-2 cursor-default select-none py-1"
               style={{ borderLeft: `4px solid ${board.color}` }}
             >
               <span className="ml-1">{task.title}</span>
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="text-xs p-2">
+          <CardContent className="text-xs p-2 select-none">
             {task.date && (
               <div
                 className={cn(
