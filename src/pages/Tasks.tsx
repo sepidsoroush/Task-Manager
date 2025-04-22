@@ -62,8 +62,8 @@ const Tasks = () => {
       {isLoading ? (
         <div className="h-96 flex items-center justify-center">
           <LoadingSpinner
-            width={96}
-            height={96}
+            width={24}
+            height={24}
             className="flex items-center place-content-center"
           />
         </div>

@@ -14,8 +14,8 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
     return (
       <div className="w-full h-screen flex items-center place-content-center">
         <LoadingSpinner
-          width={96}
-          height={96}
+          width={24}
+          height={24}
           className="flex items-center place-content-center"
         />
       </div>
