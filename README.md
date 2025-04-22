@@ -1,9 +1,6 @@
 # Chore
 
-A task manager made by Reactjs, Redux and TypeScript.
-
-> **Warning**
-> This is a work in progress. I'm building this in public.
+A task manager made by Reactjs, Redux, TypeScript, Firebase, shadcn/ui, and Tailwind CSS.
 
 ## Features
 
@@ -13,9 +10,8 @@ A task manager made by Reactjs, Redux and TypeScript.
 - [x] Responsive design
 - [x] light/ dark theme
 - [x] Authentication for login/ logout
-- [ ] Handle multiple Boards (lists)
-- [ ] Drag and Drop tasks in the Task columns
-- [ ] Calendar view
+- [x] Handle multiple Boards (lists)
+- [x] Drag and Drop tasks in the Task columns
 
 ## Stacks
 
@@ -25,3 +21,4 @@ A task manager made by Reactjs, Redux and TypeScript.
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Vite](https://vitejs.dev/)
 - [Firebase](https://firebase.google.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
