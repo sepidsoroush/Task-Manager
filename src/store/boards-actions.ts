@@ -4,6 +4,7 @@ import { getAuth } from "firebase/auth";
 import { Board, Task } from "../models";
 import { RootState } from "./index";
 import { initialBoards } from "./boards-slice";
+import { toast } from "@/hooks/use-toast"; // Add this import
 
 const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
@@ -142,6 +143,11 @@ export const deleteBoard = createAsyncThunk(
       const boards = state.boards.items;
 
       if (boards.length <= 1) {
+        toast({
+          title: "Cannot delete board",
+          description: "You must keep at least one board in your workspace.",
+          variant: "destructive",
+        });
         return rejectWithValue("Cannot delete the last board");
       }
 
