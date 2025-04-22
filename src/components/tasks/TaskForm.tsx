@@ -73,7 +73,7 @@ const TaskForm = ({
   onOpenChange,
 }: TaskFormProps) => {
   const dispatch = useAppDispatch();
-  const activeBoardId = useAppSelector((state) => state.boards.activeBoardId);
+  const { activeBoardId } = useAppSelector((state) => state.boards);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,11 +81,13 @@ const TaskForm = ({
       title: "",
       description: "",
       status: "To Do",
-      ...(taskToUpdate && taskToUpdate), // Set default values if updating
+      ...(taskToUpdate && taskToUpdate),
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!activeBoardId) return;
+
     const task: Task = {
       id: taskToUpdate ? taskToUpdate.id : new Date().getTime().toString(),
       title: values.title,
@@ -95,9 +97,9 @@ const TaskForm = ({
     };
 
     if (actionType === "create") {
-      dispatch(addTask(activeBoardId, task));
+      dispatch(addTask({ boardId: activeBoardId, task }));
     } else if (actionType === "update") {
-      dispatch(updateTask(activeBoardId, task));
+      dispatch(updateTask({ boardId: activeBoardId, task }));
     }
 
     form.reset();
@@ -105,8 +107,9 @@ const TaskForm = ({
   }
 
   const onDelete = () => {
-    if (taskToUpdate) {
-      dispatch(deleteTask(activeBoardId, taskToUpdate.id));
+    if (taskToUpdate && activeBoardId) {
+      dispatch(deleteTask({ boardId: activeBoardId, taskId: taskToUpdate.id }));
+      onOpenChange(false);
     }
   };
 

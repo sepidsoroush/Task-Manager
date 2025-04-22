@@ -50,9 +50,7 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Check for duplicate title
     const isDuplicate = boards.some((board) => {
-      // For updates, exclude the current board from duplicate check
       if (actionType === "update" && board.id === activeBoardId) {
         return false;
       }
@@ -77,9 +75,9 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
       dispatch(addBoard(board));
     } else {
       dispatch(
-        updateBoard(activeBoardId, {
-          title: values.title,
-          color: values.color,
+        updateBoard({
+          id: activeBoardId || "",
+          updates: { title: values.title, color: values.color },
         })
       );
     }
@@ -89,7 +87,9 @@ const BoardForm = ({ onOpenChange, actionType = "create" }: Props) => {
   };
 
   const onDelete = () => {
-    dispatch(deleteBoard(activeBoardId));
+    if (activeBoardId) {
+      dispatch(deleteBoard(activeBoardId));
+    }
   };
 
   return (

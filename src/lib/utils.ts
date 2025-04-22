@@ -28,8 +28,3 @@ export const COLORS = {
   neutral: "oklch(70.4% 0.04 256.788)",
   stone: "oklch(70.2% 0.021 41.788)",
 };
-
-export const initialBoards: Board[] = [
-  { id: "personal", title: "Personal", color: COLORS.cyan, tasks: [] },
-  { id: "work", title: "Work", color: COLORS.amber, tasks: [] },
-];

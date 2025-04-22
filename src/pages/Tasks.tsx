@@ -1,30 +1,33 @@
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IconPlayerPause, IconRun, IconCircleCheck } from "@tabler/icons-react";
-
 import TasksColumns from "@/components/tasks/TasksCols";
-
 import NewBoard from "@/components/boards/NewBoard";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import {
   fetchBoardsWithTasks,
-  updateActiveBoard,
+  setActiveBoard,
   updateTask,
 } from "@/store/boards-actions";
-import { Task } from "@/models";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import { Task } from "@/models";
 
 const Tasks = () => {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.ui.loading);
-  const boards = useAppSelector((state) => state.boards.items);
-  const activeBoardId = useAppSelector((state) => state.boards.activeBoardId);
-  const [selectedTab, setSelectedTab] = useState<string>(activeBoardId);
+
+  const {
+    items: boards,
+    activeBoardId,
+    status: loadingStatus,
+  } = useAppSelector((state) => state.boards);
+  const isLoading = loadingStatus === "loading";
+
+  const [selectedTab, setSelectedTab] = useState<string>(activeBoardId || "");
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value);
-    dispatch(updateActiveBoard(value));
+    dispatch(setActiveBoard(value));
   };
 
   useEffect(() => {
@@ -32,7 +35,9 @@ const Tasks = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    setSelectedTab(activeBoardId);
+    if (activeBoardId) {
+      setSelectedTab(activeBoardId);
+    }
   }, [activeBoardId]);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -42,14 +47,19 @@ const Tasks = () => {
     const task = active.data.current?.task as Task | undefined;
     const newStatus = over.id as string;
 
-    if (task && task.status !== newStatus) {
-      dispatch(updateTask(activeBoardId, { ...task, status: newStatus }));
+    if (task && task.status !== newStatus && activeBoardId) {
+      dispatch(
+        updateTask({
+          boardId: activeBoardId,
+          task: { ...task, status: newStatus },
+        })
+      );
     }
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
-      {loading ? (
+      {isLoading ? (
         <div className="h-96 flex items-center justify-center">
           <LoadingSpinner
             width={96}

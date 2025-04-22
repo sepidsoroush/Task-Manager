@@ -1,50 +1,50 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Dispatch, Action } from "redux";
 import { getAuth } from "firebase/auth";
 import { Board, Task } from "../models";
-import { boardsActions } from "./features/boards-slice";
-import { uiActions } from "./features/ui-slice";
 import { RootState } from "./index";
-import { ThunkAction } from "redux-thunk";
-import { initialBoards } from "./features/boards-slice";
+import { initialBoards } from "./boards-slice";
 
 const databaseURL = import.meta.env.VITE_DATABASE_URL;
 
-type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+// Helper function to get current user ID
+const getCurrentUserId = () => {
+  const userId = getAuth().currentUser?.uid;
+  if (!userId) throw new Error("User not authenticated");
+  return userId;
+};
 
-// Fetch boards + their metadata and tasks
-export function fetchBoardsWithTasks(): AppThunk {
-  return async (dispatch: Dispatch) => {
-    dispatch(uiActions.setLoading(true));
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return dispatch(uiActions.setLoading(false));
-
+// Fetch boards with their tasks
+export const fetchBoardsWithTasks = createAsyncThunk(
+  "boards/fetchBoardsWithTasks",
+  async (_, { rejectWithValue }) => {
     try {
+      const userId = getCurrentUserId();
       const res = await axios.get(`${databaseURL}/users/${userId}.json`);
       const data = res.data;
-      const loadedBoards: Board[] = [];
 
       if (!data) {
-        // No data yet, create initial boards
         for (const board of initialBoards) {
           await axios.put(
             `${databaseURL}/users/${userId}/${board.id}/meta.json`,
             { title: board.title, color: board.color }
           );
         }
-        dispatch(boardsActions.setBoards(initialBoards));
-        dispatch(boardsActions.setActiveBoard("personal"));
-        localStorage.setItem("activeBoardId", "personal");
+
+        return {
+          boards: initialBoards,
+          activeBoardId: localStorage.getItem("activeBoardId") || "personal",
+        };
       } else {
+        const loadedBoards: Board[] = [];
+
         for (const boardId in data) {
           const meta = data[boardId]?.meta;
           const tasksData = data[boardId]?.tasks || {};
-          const tasks: Task[] = Object.values(tasksData);
+          const tasks: Task[] = Object.keys(tasksData).map(
+            (key) => tasksData[key]
+          );
+
           loadedBoards.push({
             id: boardId,
             title: meta?.title || boardId,
@@ -53,166 +53,214 @@ export function fetchBoardsWithTasks(): AppThunk {
           });
         }
 
-        dispatch(boardsActions.setBoards(loadedBoards));
+        const activeBoardId =
+          localStorage.getItem("activeBoardId") ||
+          loadedBoards[0]?.id ||
+          "personal";
 
-        // Set active board from localStorage or fallback to first
-        const activeBoardId = localStorage.getItem("activeBoardId");
-        dispatch(
-          boardsActions.setActiveBoard(
-            activeBoardId || loadedBoards[0]?.id || "personal"
-          )
-        );
+        return {
+          boards: loadedBoards,
+          activeBoardId,
+        };
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      dispatch(uiActions.setLoading(false));
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to fetch boards");
     }
-  };
-}
+  }
+);
 
-// Add board
-export function addBoard(board: Board): AppThunk {
-  return async (dispatch: Dispatch) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
+// Add a new board
+export const addBoard = createAsyncThunk(
+  "boards/addBoard",
+  async (board: Board, { rejectWithValue }) => {
     try {
+      const userId = getCurrentUserId();
+
       await axios.put(`${databaseURL}/users/${userId}/${board.id}/meta.json`, {
         title: board.title,
         color: board.color,
       });
-      dispatch(boardsActions.addBoard({ ...board, tasks: [] }));
-      dispatch(boardsActions.setActiveBoard(board.id));
+
       localStorage.setItem("activeBoardId", board.id);
-    } catch (err) {
-      console.error(err);
+
+      return { ...board, tasks: [] };
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to add board");
     }
-  };
-}
+  }
+);
 
-// Update board metadata (title or color)
-export function updateBoard(
-  id: string,
-  updated: Partial<Pick<Board, "title" | "color">>
-): AppThunk {
-  return async (dispatch: Dispatch, getState: () => RootState) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
+// Update board metadata
+export const updateBoard = createAsyncThunk(
+  "boards/updateBoard",
+  async (
+    {
+      id,
+      updates,
+    }: { id: string; updates: Partial<Pick<Board, "title" | "color">> },
+    { getState, rejectWithValue }
+  ) => {
     try {
-      const board = getState().boards.items.find((b) => b.id === id);
-      if (!board) return;
+      const userId = getCurrentUserId();
+      const state = getState() as RootState;
+      const board = state.boards.items.find((b) => b.id === id);
 
-      const newBoard = { ...board, ...updated };
+      if (!board) {
+        return rejectWithValue("Board not found");
+      }
+
+      const updatedBoard = { ...board, ...updates };
+
       await axios.put(`${databaseURL}/users/${userId}/${id}/meta.json`, {
-        title: newBoard.title,
-        color: newBoard.color,
+        title: updatedBoard.title,
+        color: updatedBoard.color,
       });
 
-      dispatch(boardsActions.updateBoard({ id, board: newBoard }));
-    } catch (err) {
-      console.error(err);
+      return { id, updatedBoard };
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to update board");
     }
-  };
-}
+  }
+);
 
-// Delete board
-export function deleteBoard(boardId: string): AppThunk {
-  return async (dispatch: Dispatch, getState: () => RootState) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
-    const boards = getState().boards.items;
-    if (boards.length <= 1) return;
-
+// Delete a board
+export const deleteBoard = createAsyncThunk(
+  "boards/deleteBoard",
+  async (boardId: string, { getState, rejectWithValue }) => {
     try {
-      await axios.delete(`${databaseURL}/users/${userId}/${boardId}.json`);
-      dispatch(boardsActions.deleteBoard(boardId));
+      const userId = getCurrentUserId();
+      const state = getState() as RootState;
+      const boards = state.boards.items;
 
-      const updatedBoards = getState().boards.items;
-      const newActive = updatedBoards[0]?.id;
-      dispatch(boardsActions.setActiveBoard(newActive));
-      localStorage.setItem("activeBoardId", newActive);
-    } catch (err) {
-      console.error(err);
+      if (boards.length <= 1) {
+        return rejectWithValue("Cannot delete the last board");
+      }
+
+      const boardRef = `${databaseURL}/users/${userId}/${boardId}.json`;
+
+      const checkRes = await axios.get(boardRef);
+      if (!checkRes.data) {
+        console.error("Board not found in Firebase:", boardId);
+        return rejectWithValue("Board not found in database");
+      }
+
+      const deleteRes = await axios.delete(boardRef);
+      if (deleteRes.status !== 200) {
+        return rejectWithValue("Failed to delete board from database");
+      }
+
+      const verifyRes = await axios.get(boardRef);
+      if (verifyRes.data !== null) {
+        console.error("Board was not successfully deleted:", boardId);
+        return rejectWithValue("Board deletion verification failed");
+      }
+
+      const newBoards = boards.filter((b) => b.id !== boardId);
+      const newActiveId = newBoards[0]?.id;
+
+      if (newActiveId) {
+        localStorage.setItem("activeBoardId", newActiveId);
+      }
+
+      return { boardId, newActiveId };
+    } catch (error) {
+      console.error("Delete board error:", error);
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to delete board");
     }
-  };
-}
+  }
+);
 
-// Add a task to a board
-export function addTask(boardId: string, task: Task): AppThunk {
-  return async (dispatch: Dispatch) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
-    dispatch(boardsActions.addTask({ boardId, task }));
-
+// Add task to a board
+export const addTask = createAsyncThunk(
+  "boards/addTask",
+  async (
+    { boardId, task }: { boardId: string; task: Task },
+    { rejectWithValue }
+  ) => {
     try {
+      const userId = getCurrentUserId();
+
       await axios.put(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${task.id}.json`,
         task
       );
-    } catch (err) {
-      console.error(err);
-      dispatch(boardsActions.deleteTask({ boardId, taskId: task.id }));
+
+      return { boardId, task };
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to add task");
     }
-  };
-}
+  }
+);
 
 // Update a task
-export function updateTask(
-  boardId: string,
-  task: Task,
-  prevTask?: Task
-): AppThunk {
-  return async (dispatch: Dispatch) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
-    dispatch(boardsActions.updateTask({ boardId, task }));
-
+export const updateTask = createAsyncThunk(
+  "boards/updateTask",
+  async (
+    { boardId, task }: { boardId: string; task: Task },
+    { rejectWithValue }
+  ) => {
     try {
+      const userId = getCurrentUserId();
+
       await axios.put(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${task.id}.json`,
         task
       );
-    } catch (err) {
-      console.error(err);
-      if (prevTask) {
-        dispatch(boardsActions.updateTask({ boardId, task: prevTask }));
+
+      return { boardId, task };
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
       }
+      return rejectWithValue("Failed to update task");
     }
-  };
-}
+  }
+);
 
 // Delete a task
-export function deleteTask(boardId: string, taskId: string): AppThunk {
-  return async (dispatch: Dispatch, getState: () => RootState) => {
-    const userId = getAuth().currentUser?.uid;
-    if (!userId) return;
-
-    const task = getState()
-      .boards.items.find((b) => b.id === boardId)
-      ?.tasks.find((t) => t.id === taskId);
-
-    dispatch(boardsActions.deleteTask({ boardId, taskId }));
-
+export const deleteTask = createAsyncThunk(
+  "boards/deleteTask",
+  async (
+    { boardId, taskId }: { boardId: string; taskId: string },
+    { rejectWithValue }
+  ) => {
     try {
+      const userId = getCurrentUserId();
+
       await axios.delete(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${taskId}.json`
       );
-    } catch (err) {
-      console.error(err);
-      if (task) dispatch(boardsActions.addTask({ boardId, task }));
+
+      return { boardId, taskId };
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Failed to delete task");
     }
-  };
-}
+  }
+);
 
 // Set active board
-export function updateActiveBoard(boardId: string): AppThunk {
-  return (dispatch: Dispatch) => {
-    dispatch(boardsActions.setActiveBoard(boardId));
+export const setActiveBoard = createAsyncThunk(
+  "boards/setActiveBoard",
+  async (boardId: string) => {
     localStorage.setItem("activeBoardId", boardId);
-  };
-}
+    return boardId;
+  }
+);
