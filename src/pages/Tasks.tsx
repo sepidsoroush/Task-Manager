@@ -12,7 +12,7 @@ import {
   updateActiveBoard,
   updateTask,
 } from "@/store/boards-actions";
-
+import { Task } from "@/models";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 
 const Tasks = () => {
@@ -37,15 +37,12 @@ const Tasks = () => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over || active.id === over.id) return;
 
-    const task = active.data.current?.task;
+    const task = active.data.current?.task as Task | undefined;
+    const newStatus = over.id as string;
 
-    // Directly set status from the column name
-    const newStatus = over.id; // Assuming over.id is just "To Do", "Doing", or "Done"
-
-    if (task.status !== newStatus) {
+    if (task && task.status !== newStatus) {
       dispatch(updateTask(activeBoardId, { ...task, status: newStatus }));
     }
   };

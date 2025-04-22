@@ -146,49 +146,65 @@ export function addTask(boardId: string, task: Task): AppThunk {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
 
+    dispatch(boardsActions.addTask({ boardId, task }));
+
     try {
       await axios.put(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${task.id}.json`,
         task
       );
-      dispatch(boardsActions.addTask({ boardId, task }));
     } catch (err) {
       console.error(err);
+      dispatch(boardsActions.deleteTask({ boardId, taskId: task.id }));
     }
   };
 }
 
 // Update a task
-export function updateTask(boardId: string, task: Task): AppThunk {
+export function updateTask(
+  boardId: string,
+  task: Task,
+  prevTask?: Task
+): AppThunk {
   return async (dispatch: Dispatch) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
+
+    dispatch(boardsActions.updateTask({ boardId, task }));
 
     try {
       await axios.put(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${task.id}.json`,
         task
       );
-      dispatch(boardsActions.updateTask({ boardId, task }));
     } catch (err) {
       console.error(err);
+      if (prevTask) {
+        dispatch(boardsActions.updateTask({ boardId, task: prevTask }));
+      }
     }
   };
 }
 
 // Delete a task
 export function deleteTask(boardId: string, taskId: string): AppThunk {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch, getState: () => RootState) => {
     const userId = getAuth().currentUser?.uid;
     if (!userId) return;
+
+    const task = getState()
+      .boards.items.find((b) => b.id === boardId)
+      ?.tasks.find((t) => t.id === taskId);
+
+    dispatch(boardsActions.deleteTask({ boardId, taskId }));
 
     try {
       await axios.delete(
         `${databaseURL}/users/${userId}/${boardId}/tasks/${taskId}.json`
       );
-      dispatch(boardsActions.deleteTask({ boardId, taskId }));
     } catch (err) {
       console.error(err);
+      if (task) dispatch(boardsActions.addTask({ boardId, task }));
     }
   };
 }
