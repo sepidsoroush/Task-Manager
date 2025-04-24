@@ -15,7 +15,7 @@ const SignIn: React.FC = () => {
 
     try {
       await signIn(email, password);
-      navigate("/");
+      navigate("/tasks");
     } catch (err) {
       console.error(err);
     }

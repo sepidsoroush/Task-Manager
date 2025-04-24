@@ -6,10 +6,15 @@ import Tasks from "./pages/Tasks";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import MarketingPage from "./pages/Marketing";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <MarketingPage />,
+  },
+  {
+    path: "/tasks",
     element: (
       <ProtectedRoute>
         <RootLayout />

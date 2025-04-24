@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "@/context/AuthContext";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
@@ -9,6 +9,7 @@ type Props = {
 
 const ProtectedRoute: React.FC<Props> = ({ children }) => {
   const { user, loading } = useAuthContext();
+  const location = useLocation();
 
   if (loading)
     return (
@@ -21,7 +22,9 @@ const ProtectedRoute: React.FC<Props> = ({ children }) => {
       </div>
     );
 
-  if (!user) return <Navigate to="/signin" replace />;
+  if (!user) return <Navigate to="/" replace />;
+
+  if (location.pathname === "/") return <Navigate to="/tasks" replace />;
 
   return <>{children}</>;
 };
